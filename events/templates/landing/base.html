@@ -8,7 +8,13 @@
     <h1>maya</h1>
     <ul>
         {% for event in events %}
-        <li>{{ event }}</li>  <!-- This will call the __str__ method of the Event model -->
+        <li>{{ event }}
+            <ul>
+                {% for detail in event.eventdetail_set.all %}
+                <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
+                {% endfor %}
+            </ul>
+        </li>
         {% endfor %}
     </ul>
 </body>
