@@ -10,11 +10,28 @@ def index(request):
 
 def add_event(request):
     if request.method == "POST":
-        event_name = request.POST.get('event_name')
-        print('test')
+        
+        # event_name = request.POST.get('event_name')
+        event_name = request.POST.get('event_name').strip().lower()    
         if event_name:
-            event = Event.objects.create(
-                name=event_name)
-            EventDetail.objects.create(
-                event=event, timestamp=timezone.now())
-        return HttpResponseRedirect('/events/')
+            # Check if an Event with this name already exists
+            event, created = Event.objects.get_or_create(name=event_name)
+
+            # Create a new EventDetail for this event
+            EventDetail.objects.create(event=event, timestamp=timezone.now())
+            
+            # Redirect to the list page or some confirmation page
+            return HttpResponseRedirect('/events/')  # Adjust the URL as needed
+    # Redirect back to the form page if not a POST request or if the name is empty
+    return HttpResponseRedirect('/events/')
+    # if request.method == "POST":
+    #     event_name = request.POST.get('event_name')
+    #     print('test')
+    #     if event_name:
+    #         event = Event.objects.create(
+    #             name=event_name)
+    #         EventDetail.objects.create(
+    #             event=event, timestamp=timezone.now())
+    #     return HttpResponseRedirect('/events/')
+
+
