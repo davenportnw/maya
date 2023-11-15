@@ -6,6 +6,14 @@
 </head>
 <body>
     <h1>maya</h1>
+    {% block content %}
+    {% endblock %}
+    <form method="post" action="{% url 'events:add_event' %}">
+        {% csrf_token %}
+        <input type="text" name="event_name" id="event_name" placeholder="Enter Event Name">
+        <button type="submit">Add Event</button>
+    </form>
+    
     <ul>
         {% for event in events %}
         <li>{{ event }}
