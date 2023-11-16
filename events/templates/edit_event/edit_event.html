@@ -11,6 +11,6 @@
             <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
         {% endfor %}
     </ul>
-    <!-- You can add editing functionality here if needed -->
+    <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>
 </body>
 </html>
