@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from datetime import datetime
 
-# Create your views here.
 def index(request):
     events = Event.objects.prefetch_related('eventdetail_set').all()
     return render(request, "landing/base.html", {'events': events})
@@ -62,4 +61,15 @@ def update_timestamp(request, detail_id):
             # You might want to add some form of user notification here
             pass
 
+    return redirect('events:edit_event', event_id=detail.event.id)
+    
+def delete_timestamp(request, detail_id):
+    detail = get_object_or_404(EventDetail, id=detail_id)
+
+    if request.method == 'POST':
+        event_id = detail.event.id
+        detail.delete()
+        return redirect('events:edit_event', event_id=event_id)
+
+    # If not POST, redirect back (or to some other page)
     return redirect('events:edit_event', event_id=detail.event.id)

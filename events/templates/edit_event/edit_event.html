@@ -17,6 +17,10 @@
             <input type="text" name="timestamp" value="{{ detail.timestamp|date:'Y-m-d H:i' }}">
             <button type="submit">Update Timestamp</button>
         </form>
+        <form method="post" action="{% url 'events:delete_timestamp' detail.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
     {% endfor %}
     <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>
 </body>
