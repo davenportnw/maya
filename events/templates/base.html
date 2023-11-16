@@ -20,22 +20,33 @@
     </form>
     <ul> 
         {% for event in events %}
-        <div class="event-box">
-            <form method="post" action="{% url 'events:add_timestamp' event.id %}">
-                {% csrf_token %}
-                <button type="submit" class="event-button">{{ event }}</button>
-            </form>
-            <a href="{% url 'events:edit_event' event.id %}" class="edit-button">Edit</a> 
-            <form method="post" action="{% url 'events:delete_event' event.id %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" class="delete-button">Delete Event</button>
-            </form>
-            <ul>
-                {% for detail in event.eventdetail_set.all %}
-                <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
-                {% endfor %}
-            </ul>
+        <!-- <div class="event-box"> -->
+        <div class="card">
+            <div class="card-body">
+                <form method="post" action="{% url 'events:add_timestamp' event.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="event-button">{{ event }}</button>
+                </form>
+                <div class="row">
+                    <div class="col text-end">
+                        <a href="{% url 'events:edit_event' event.id %}" class="edit-button">Edit</a>
+                    </div>
+                    <div class="col">
+                        <form method="post" action="{% url 'events:delete_event' event.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-button">Delete</button>
+                        </form>
+                    </div>
+                </div>
+
+                <ul>
+                    {% for detail in event.eventdetail_set.all %}
+                    <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
+        <br/>
         {% endfor %}
     </ul>
 </body>

@@ -16,18 +16,6 @@ h1 {
     margin-top: 0;
 }
 
-/* Form styling */
-.event-box {
-    background-color: white; /* White background for forms */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
-    max-width: 400px;
-    margin: 20px auto;
-    text-align: center;
-    margin-bottom: 20px; /* Added bottom margin for spacing */
-}
-
 .form-box {
     padding: 20px;
     border-radius: 8px;
@@ -74,7 +62,7 @@ form button:hover {
 
 /* Unordered list style */
 ul {
-    list-style-type: none; /* No bullets for a cleaner look */
+    list-style-type: none;
     padding: 0;
     max-width: 400px;
     margin: 20px auto;
