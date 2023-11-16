@@ -1,16 +1,15 @@
-<!-- edit_event.html -->
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Edit Event</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'edit_event.css' %}">
 </head>
 <body>
     <h1>Edit Event: {{ event.name }}</h1>
-    <!-- <ul>
-        {% for detail in event.eventdetail_set.all %}
-            <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
-        {% endfor %}
-    </ul> -->
     {% for detail in event.eventdetail_set.all %}
         <form method="post" action="{% url 'events:update_timestamp' detail.id %}">
             {% csrf_token %}
