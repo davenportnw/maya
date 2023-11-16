@@ -9,21 +9,6 @@ def index(request):
     return render(request, "landing/base.html", {'events': events})
 
 def add_event(request):
-    # if request.method == "POST":
-        
-    #     # event_name = request.POST.get('event_name')
-    #     event_name = request.POST.get('event_name').strip().lower()    
-    #     if event_name:
-    #         # Check if an Event with this name already exists
-    #         event, created = Event.objects.get_or_create(name=event_name)
-
-    #         # Create a new EventDetail for this event
-    #         EventDetail.objects.create(event=event, timestamp=timezone.now())
-            
-    #         # Redirect to the list page or some confirmation page
-    #         return HttpResponseRedirect('/events/')  # Adjust the URL as needed
-    # # Redirect back to the form page if not a POST request or if the name is empty
-    # return HttpResponseRedirect('/events/')
      if request.method == "POST":
         event_name = request.POST.get('event_name').strip()
 
@@ -40,6 +25,19 @@ def add_event(request):
 
             # Redirect to the list page or some confirmation page
             return HttpResponseRedirect('/events/') 
-   
+            
+def add_timestamp(request, event_id):
+    if request.method == "POST":
+        # Get the event by ID
+        event = Event.objects.get(id=event_id)
+        
+        # Create a new EventDetail for this event
+        EventDetail.objects.create(event=event, timestamp=timezone.now())
+
+        # Redirect back to the same page
+        return HttpResponseRedirect('/events/')
+    else:
+        # Handle the case where the method is not POST
+        return HttpResponseRedirect('/events/')
 
 
