@@ -6,11 +6,18 @@
 </head>
 <body>
     <h1>Edit Event: {{ event.name }}</h1>
-    <ul>
+    <!-- <ul>
         {% for detail in event.eventdetail_set.all %}
             <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
         {% endfor %}
-    </ul>
+    </ul> -->
+    {% for detail in event.eventdetail_set.all %}
+        <form method="post" action="{% url 'events:update_timestamp' detail.id %}">
+            {% csrf_token %}
+            <input type="text" name="timestamp" value="{{ detail.timestamp|date:'Y-m-d H:i' }}">
+            <button type="submit">Update Timestamp</button>
+        </form>
+    {% endfor %}
     <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>
 </body>
 </html>
