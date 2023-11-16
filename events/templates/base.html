@@ -1,9 +1,14 @@
-<!DOCTYPE html>
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Maya</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
 </head>
+
 <body>
     <h1>maya</h1>
     {% block content %}

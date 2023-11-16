@@ -1,0 +1,72 @@
+/* Main body style */
+body {
+    background-color: #f6e4ba; /* Light creamy color */
+    color: #333; /* Darker color for text for better readability */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Header style */
+h1 {
+    color: #444; /* Darker shade for modern look */
+    text-align: center;
+    font-size: 2.5em;
+    margin-top: 0;
+}
+
+/* Form styling */
+form {
+    background-color: white; /* White background for forms */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* Input field styling */
+form input[type="text"] {
+    border: 2px solid #ddd; /* Lighter border for inputs */
+    border-radius: 4px;
+    padding: 10px 15px;
+    width: calc(100% - 30px); /* Full-width input fields */
+    margin-bottom: 10px;
+}
+
+/* Button styling */
+form button {
+    background-color: #444; /* Dark button color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Button hover effect */
+form button:hover {
+    background-color: #555;
+}
+
+/* Unordered list style */
+ul {
+    list-style-type: none; /* No bullets for a cleaner look */
+    padding: 0;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+/* List item style */
+ul li {
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Modern, minimalistic approach with focus on flat design and simplicity */
