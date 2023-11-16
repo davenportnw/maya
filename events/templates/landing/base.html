@@ -19,6 +19,7 @@
         <form method="post" action="{% url 'events:add_timestamp' event.id %}">
             {% csrf_token %}
             <button type="submit">{{ event }}</button>
+            <a href="{% url 'events:edit_event' event.id %}">Edit</a> 
         </form>
                 <ul>
                     {% for detail in event.eventdetail_set.all %}

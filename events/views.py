@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Event, EventDetail
 from django.utils import timezone
 from django.http import HttpResponseRedirect
@@ -40,4 +40,6 @@ def add_timestamp(request, event_id):
         # Handle the case where the method is not POST
         return HttpResponseRedirect('/events/')
 
-
+def edit_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'edit_event/edit_event.html', {'event': event})

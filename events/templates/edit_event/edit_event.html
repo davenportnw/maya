@@ -1,0 +1,16 @@
+<!-- edit_event.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Event</title>
+</head>
+<body>
+    <h1>Edit Event: {{ event.name }}</h1>
+    <ul>
+        {% for detail in event.eventdetail_set.all %}
+            <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
+        {% endfor %}
+    </ul>
+    <!-- You can add editing functionality here if needed -->
+</body>
+</html>
