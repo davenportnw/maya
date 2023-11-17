@@ -16,50 +16,6 @@ h1 {
     margin-top: 0;
 }
 
-.form-box {
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 400px;
-    margin: 20px auto;
-    text-align: center;
-}
-
-.form-button {
-    background-color: #444; /* Dark button color */
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 50%;
-    font-size: 18px;
-}
-/* Input field styling */
-form input[type="text"] {
-    border: 2px solid #ddd; /* Lighter border for inputs */
-    border-radius: 4px;
-    padding: 10px 15px;
-    width: calc(100% - 30px); /* Full-width input fields */
-    margin-bottom: 10px;
-}
-
-/* Button styling */
-.event-button {
-    background-color: #444; /* Dark button color */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 20px;
-}
-
-/* Button hover effect */
-form button:hover {
-    background-color: #555;
-}
-
 /* Unordered list style */
 ul {
     list-style-type: none;
@@ -77,45 +33,3 @@ ul li {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-button.delete-button {
-    background: none;
-    color: #007bff; /* Bootstrap's default link color */
-    border: none;
-    padding: 0;
-    font-size: inherit;
-    font-family: inherit;
-    cursor: pointer;
-}
-
-.delete-button:hover {
-    color: inherit; /* Keeps the text color the same on hover */
-    text-decoration: none; /* Removes underline on hover */
-    background-color: inherit; /* Keeps the background the same on hover */
-    border-color: inherit; /* Keeps the border color the same on hover */
-}
-
-button.delete-button:hover {
-    color: #0056b3; /* Darker shade for hover effect */
-    text-decoration: underline;
-}
-.button-group {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Spacing between buttons */
-}
-
-.edit-button, .delete-button {
-    padding: 5px 10px; /* Adjust padding as needed */
-    text-decoration: none;
-    color: #007bff; /* Link color */
-    background-color: white; /* Background color */
-}
-
-.edit-button:hover, .delete-button:hover {
-    color: #0056b3; /* Darker color on hover */
-    text-decoration: underline;
-    border-color: #0056b3; /* Border color on hover */
-}
-
-
-/* Modern, minimalistic approach with focus on flat design and simplicity */
