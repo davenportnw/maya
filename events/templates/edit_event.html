@@ -9,18 +9,33 @@
     <link rel="stylesheet" type="text/css" href="{% static 'edit_event.css' %}">
 </head>
 <body>
-    <h1>Edit Event: {{ event.name }}</h1>
-    {% for detail in event.eventdetail_set.all %}
-        <form method="post" action="{% url 'events:update_timestamp' detail.id %}">
-            {% csrf_token %}
-            <input type="text" name="timestamp" value="{{ detail.timestamp|date:'Y-m-d H:i' }}">
-            <button type="submit">Update Timestamp</button>
-        </form>
-        <form method="post" action="{% url 'events:delete_timestamp' detail.id %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit">Delete</button>
-        </form>
-    {% endfor %}
-    <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>maya</h1>
+            <br/>
+            <h3><i>Edit Event: {{ event.name }}</i></h3>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        {% for detail in event.eventdetail_set.all %}
+                        <div class="d-flex align-items-center justify-content-center mb-2"> 
+                            <form method="post" action="{% url 'events:update_timestamp' detail.id %}">
+                                {% csrf_token %}
+                                <input type="text" name="timestamp" value="{{ detail.timestamp|date:'Y-m-d H:i' }}">
+                                <button type="submit" class="btn btn-primary">Update Timestamp</button>
+                            </form>
+                            <br/>
+                            <form method="post" action="{% url 'events:delete_timestamp' detail.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>
+        </div>
+    </div>
 </body>
 </html>
