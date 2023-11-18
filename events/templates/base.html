@@ -36,10 +36,10 @@
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col text-end ">
-                        <a href="{% url 'events:edit_event' event.id %}" class="edit-button">Edit</a>
+                    <div class="col text-end">
+                        <button onclick="window.location.href='{% url 'events:edit_event' event.id %}'" class="btn btn-link">Edit</button>
                     </div>
-                    <div class="col">
+                    <div class="col"> 
                         <form method="post" action="{% url 'events:delete_event' event.id %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-link">Delete</button>
