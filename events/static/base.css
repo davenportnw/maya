@@ -1,6 +1,5 @@
 /* Main body style */
-body {
-    background-color: #f6e4ba; /* Light creamy color */
+body {      
     color: #333; /* Darker color for text for better readability */
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;

@@ -32,7 +32,7 @@
                 <form method="post" action="{% url 'events:add_timestamp' event.id %}">
                     {% csrf_token %}
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-secondary btn-lg">{{ event }}</button>
+                        <button type="submit" class="btn btn-primary btn-lg">{{ event }}</button>
                     </div>
                 </form>
                 <div class="row">
