@@ -20,3 +20,7 @@ h1 {
 h3 {
     text-align: center;
 }
+
+.custom-datepicker-width {
+    width: 100%; /* Adjust this value as needed */
+}

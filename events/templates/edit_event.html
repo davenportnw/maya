@@ -23,27 +23,25 @@
             <h3><i>Edit Event: {{ event.name }}</i></h3>
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        {% for detail in event.occurrence_set.all %}
-                        <div class="d-flex align-items-center justify-content-center mb-2"> 
-                            <form method="post" action="{% url 'events:edit_event' detail.id %}">
-                                {% csrf_token %}
-                                <input id="datepicker" width="276" name="timestamp" value="{{ detail.timestamp|date:'m/d/Y' }}" />
-                                <script>
-                                    $('#datepicker').datepicker({
+                    {% for detail in event.occurrence_set.all %}
+                    <div class="mb-3 d-flex flex-column align-items-center"> 
+                        <form method="post" action="{% url 'events:edit_event' detail.id %}">
+                            {% csrf_token %}
+                            <input id="datepicker-{{ detail.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ detail.timestamp|date:'m/d/Y' }}" />
+                            <script>
+                                $(document).ready(function() {
+                                    $('#datepicker-{{ detail.id }}').datepicker({
                                         uiLibrary: 'bootstrap5'
                                     });
-                                </script>
-                                <button type="submit" class="btn btn-primary">Update Timestamp</button>
-                            </form>
-                            <br/>
-                            <form method="post" action="{% url 'events:delete_timestamp' detail.id %}" >
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-danger">Delete</button>
-                            </form>
-                        </div>
-                        {% endfor %}
+                                });
+                            </script>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary me-2">Update Timestamp</button>
+                                <button type="submit" formaction="{% url 'events:delete_timestamp' detail.id %}" class="btn btn-outline-danger">Delete</button>
+                            </div>
+                        </form>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>

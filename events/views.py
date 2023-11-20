@@ -42,28 +42,6 @@ def add_timestamp(request, event_id):
         # Handle the case where the method is not POST
         return HttpResponseRedirect('/events/')
 
-# def edit_event(request, event_id):
-#     event = get_object_or_404(Event, id=event_id)
-    # return render(request, 'edit_event.html', {'event': event})
-
-# def update_timestamp(request, detail_id):
-#     detail = get_object_or_404(EventDetail, id=detail_id)
-#     if request.method == 'POST':
-#         timestamp_str = request.POST.get('timestamp')
-        
-#         # Convert string to datetime object
-#         try:
-#             converted_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M')
-#             detail.timestamp = converted_timestamp
-#             detail.save()
-#             return redirect('events:edit_event', event_id=detail.event.id)
-#         except ValueError:
-#             # Handle the error if the date format is incorrect
-#             # You might want to add some form of user notification here
-#             pass
-
-#     return redirect('events:edit_event', event_id=detail.event.id)
-
 
 def edit_event(request, event_id, detail_id=None):
     """
