@@ -61,7 +61,7 @@ def edit_occurrence(request, occurrence_id=None):
             except ValueError:
                 # Handle the error if the date format is incorrect
                 pass
-            return redirect('events:edit_occurrence', occurrence_id=occurrence.id)
+            return redirect('events:index')
         else:
             # Handle the case where timestamp is None
             pass
