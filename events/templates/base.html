@@ -37,7 +37,7 @@
                 </form>
                 <div class="row">
                     <div class="col text-end">
-                        <button onclick="window.location.href='{% url 'events:edit_event' event.id %}'" class="btn btn-link">Edit</button>
+                        <button onclick="window.location.href='{% url 'events:edit_occurrence' event.id %}'" class="btn btn-link">Edit</button>
                     </div>
                     <div class="col text-start"> 
                         <form method="post" action="{% url 'events:delete_event' event.id %}">
