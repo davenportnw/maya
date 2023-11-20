@@ -3,6 +3,7 @@ from django.utils import timezone
 
 class Event(models.Model):
     name = models.CharField(max_length=400)
+    emoji = models.CharField(max_length=42, null=True)
     def __str__(self):
         return f"{self.name}"
 
