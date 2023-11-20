@@ -45,7 +45,7 @@
                 </div>
 
                 <ul>
-                    {% for occurrence in event.occurrence_set.all %}
+                    {% for occurrence in event.occurrence_set.all|dictsort:"timestamp" %}
                     <li>{{ occurrence.timestamp|date:"N j, Y" }}
                         <button onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="btn btn-link">Edit</button>
                     </li>
