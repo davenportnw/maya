@@ -23,7 +23,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3 d-flex flex-column align-items-center"> 
-                        <form method="post" action="{% url 'events:edit_occurrence' occurrence.id %}">
+                        <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
                             {% csrf_token %}
                             <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
                             <script>
@@ -35,9 +35,14 @@
                             </script>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-outline-primary me-2">Save</button>
-                                <button type="submit" formaction="{% url 'events:delete_timestamp' occurrence.id %}" class="btn btn-outline-danger">Delete</button>
-                            </div>
+                            
                         </form>
+                        <form method="post"  action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="btn btn-outline-danger">Delete</button>
+                        </form>
+                            </div>
                     </div>
                 </div>
             </div>
