@@ -48,8 +48,8 @@
                 </div>
 
                 <ul>
-                    {% for detail in event.eventdetail_set.all %}
-                    <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
+                    {% for detail in event.occurrence_set.all %}
+                    <li>{{ detail.timestamp|date:"N j, Y" }}</li>
                     {% endfor %}
                 </ul>
             </div>

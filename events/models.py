@@ -6,8 +6,8 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-class EventDetail(models.Model):
-    timestamp =  models.DateTimeField(default=timezone.now)
+class Occurrence(models.Model):
+    timestamp =  models.DateField(default=timezone.now)
     event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True)
     def __str__(self):
-        return  f"{self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
+        return  f"{self.timestamp.strftime('%Y-%m-%d')}"
