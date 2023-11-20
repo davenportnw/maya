@@ -19,28 +19,26 @@
         <div class="col-md-8">
             <h1>maya</h1>
             <br/>
-            <h3><i>Edit Occurrences For: {{ event.name }}</i></h3>
+            <h3><i>Edit Occurrences For: {{ occurrence.event.name }}</i></h3>
             <div class="card">
                 <div class="card-body">
-                    {% for detail in event.occurrence_set.all %}
                     <div class="mb-3 d-flex flex-column align-items-center"> 
-                        <form method="post" action="{% url 'events:edit_occurrence' detail.id %}">
+                        <form method="post" action="{% url 'events:edit_occurrence' occurrence.id %}">
                             {% csrf_token %}
-                            <input id="datepicker-{{ detail.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ detail.timestamp|date:'m/d/Y' }}" />
+                            <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
                             <script>
                                 $(document).ready(function() {
-                                    $('#datepicker-{{ detail.id }}').datepicker({
+                                    $('#datepicker-{{ occurrence.id }}').datepicker({
                                         uiLibrary: 'bootstrap5'
                                     });
                                 });
                             </script>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-outline-primary me-2">Save</button>
-                                <button type="submit" formaction="{% url 'events:delete_timestamp' detail.id %}" class="btn btn-outline-danger">Delete</button>
+                                <button type="submit" formaction="{% url 'events:delete_timestamp' occurrence.id %}" class="btn btn-outline-danger">Delete</button>
                             </div>
                         </form>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>

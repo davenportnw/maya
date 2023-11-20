@@ -43,43 +43,44 @@ def add_timestamp(request, event_id):
         return HttpResponseRedirect('/events/')
 
 
-def edit_occurrence(request, event_id, detail_id=None):
+def edit_occurrence(request, occurrence_id=None):
     """
     View function for loading AND editing an event
     """
     # Check if the request is a POST request indicating a form submission
     if request.method == 'GET':
-        event = get_object_or_404(Event, id=event_id)
-        return render(request, 'edit_occurrence.html', {'event': event})
+        occurrence = get_object_or_404(Occurrence, id=occurrence_id)
+        return render(request, 'edit_occurrence.html', {'occurrence': occurrence})
 
     if request.method == 'POST':
-        occurrence = get_object_or_404(Occurrence, id=detail_id)
+        occurrence = get_object_or_404(Occurrence, id=occurrence_id)
         timestamp_str = request.POST.get('timestamp')
         # Convert string to datetime object
         try:
             converted_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M')
             occurrence.timestamp = converted_timestamp
             occurrence.save()
-            return redirect('events:edit_occurrence', event_id=occurrence.event.id)
+            return redirect('events:edit_occurrence', occurrence_id=occurrence.id)
         except ValueError:
             # Handle the error if the date format is incorrect
             # You might want to add some form of user notification here
             pass
-        return redirect('events:edit_occurrence', event_id=occurrence.event.id)
+        # return redirect('events:edit_occurrence', occurrence_id=occurrence.id)
+        return render(request, 'edit_occurrence.html', {'occurrence': occurrence.id})
     
 
 
 
-def delete_timestamp(request, detail_id):
-    detail = get_object_or_404(Occurrence, id=detail_id)
+def delete_timestamp(request, occurrence_id):
+    occurrence = get_object_or_404(Occurrence, id=occurrence_id)
 
     if request.method == 'POST':
-        event_id = detail.event.id
-        detail.delete()
+        event_id = occurrence.event.id
+        occurrence.delete()
         return redirect('events:edit_occurrence', event_id=event_id)
 
     # If not POST, redirect back (or to some other page)
-    return redirect('events:edit_occurrence', event_id=detail.event.id)
+    return redirect('events:edit_occurrence', event_id=occurrence.event.id)
 
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)

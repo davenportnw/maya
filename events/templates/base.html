@@ -36,9 +36,6 @@
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col text-end">
-                        <button onclick="window.location.href='{% url 'events:edit_occurrence' event.id %}'" class="btn btn-link">Edit</button>
-                    </div>
                     <div class="col text-start"> 
                         <form method="post" action="{% url 'events:delete_event' event.id %}">
                             {% csrf_token %}
@@ -48,8 +45,10 @@
                 </div>
 
                 <ul>
-                    {% for detail in event.occurrence_set.all %}
-                    <li>{{ detail.timestamp|date:"N j, Y" }}</li>
+                    {% for occurrence in event.occurrence_set.all %}
+                    <li>{{ occurrence.timestamp|date:"N j, Y" }}
+                        <button onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="btn btn-link">Edit</button>
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
