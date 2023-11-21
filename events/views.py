@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from datetime import datetime
 from django.views import generic
 from .forms import EventForm
-
+from django.contrib import messages
 def index(request):
     events = Event.objects.prefetch_related('occurrence_set').all()
     return render(request, "base.html", {'events': events})
@@ -24,10 +24,16 @@ def add_event(request):
 
             # Create a new EventDetail for this event
             Occurrence.objects.create(event=event, timestamp=timezone.now())
-
+    
             # Redirect to the list page or some confirmation page
             return HttpResponseRedirect('/events/') 
-            
+        else:
+            # Add a message for empty event name
+            messages.error(request, 'Please write an event name.')
+
+        return HttpResponseRedirect('/events/')
+     
+     
 def add_timestamp(request, event_id):
     if request.method == "POST":
         # Get the event by ID
