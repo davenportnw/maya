@@ -23,26 +23,29 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3 d-flex flex-column align-items-center"> 
-                        <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
-                            {% csrf_token %}
-                            <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
-                            <script>
-                                $(document).ready(function() {
-                                    $('#datepicker-{{ occurrence.id }}').datepicker({
-                                        uiLibrary: 'bootstrap5'
-                                    });
-                                });
-                            </script>
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-outline-primary me-2">Save</button>
-                            
-                        </form>
-                        <form method="post"  action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">
-                            <button type="submit" class="btn btn-outline-danger">Delete</button>
-                        </form>
-                            </div>
+                                <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
+                                    {% csrf_token %}
+                                    <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('#datepicker-{{ occurrence.id }}').datepicker({
+                                                uiLibrary: 'bootstrap5'
+                                            });
+                                        });
+                                    </script>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-outline-primary me-2">Save</button>
+                                    </div>
+                                </form>
+                                    <div class="col text-end">
+                                        <form method="post"  action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete">                                
+                                            <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
                     </div>
                 </div>
             </div>
