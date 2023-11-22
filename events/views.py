@@ -3,9 +3,12 @@ from .models import Event, Occurrence
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from datetime import datetime
-from django.views import generic
-from .forms import EventForm
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+
 def index(request):
     events = Event.objects.prefetch_related('occurrence_set').all()
     return render(request, "base.html", {'events': events})
@@ -33,7 +36,7 @@ def add_event(request):
 
         return HttpResponseRedirect('/events/')
      
-     
+
 def add_timestamp(request, event_id):
     if request.method == "POST":
         # Get the event by ID
@@ -83,3 +86,31 @@ def delete_event(request, event_id):
 
     # If not POST, redirect back (or to some other page)
     return redirect('events:index')
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirect to the login page after registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('events:index')  # Redirect to a home page or dashboard
+            else:
+                # Invalid login
+                pass
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
+
