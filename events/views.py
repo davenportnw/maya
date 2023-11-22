@@ -8,11 +8,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def index(request):
     events = Event.objects.prefetch_related('occurrence_set').all()
     return render(request, "base.html", {'events': events})
-
+@login_required
 def add_event(request):
      if request.method == "POST":
         event_name = request.POST.get('event_name').strip()
@@ -36,7 +38,7 @@ def add_event(request):
 
         return HttpResponseRedirect('/events/')
      
-
+@login_required
 def add_timestamp(request, event_id):
     if request.method == "POST":
         # Get the event by ID
@@ -50,7 +52,7 @@ def add_timestamp(request, event_id):
     else:
         # Handle the case where the method is not POST
         return HttpResponseRedirect('/events/')
-
+@login_required
 def edit_occurrence(request, occurrence_id=None):
     occurrence = get_object_or_404(Occurrence, id=occurrence_id)
 
@@ -76,7 +78,7 @@ def edit_occurrence(request, occurrence_id=None):
             pass
 
     return render(request, 'edit_occurrence.html', {'occurrence': occurrence})
-
+@login_required
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
 
@@ -92,9 +94,10 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # Redirect to the login page after registration
+            return redirect('events:login')  # Redirect to the login page after registration
     else:
         form = UserCreationForm()
+        print('invalid creation')
     return render(request, 'register.html', {'form': form})
 
 def login_view(request):
