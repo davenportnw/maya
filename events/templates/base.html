@@ -71,10 +71,7 @@
         {% endfor %}
     </ul>
     <div class="d-flex justify-content-center mt-4">
-        <form action="{% url 'events:logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-secondary">Logout</button>
-        </form> 
+        <button onclick="window.location.href='{% url 'events:logout' %}'" class="btn btn-secondary">Logout</button>
     </div>
 </body>
 </html>
