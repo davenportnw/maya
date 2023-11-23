@@ -78,7 +78,7 @@ def edit_occurrence(request, occurrence_id=None):
             pass
 
     return render(request, 'edit_occurrence.html', {'occurrence': occurrence})
-@login_required
+
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
 
@@ -94,10 +94,11 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('events:login')  # Redirect to the login page after registration
+            return redirect('events:login') 
+        else:
+            print(form.errors)
     else:
         form = UserCreationForm()
-        print('invalid creation')
     return render(request, 'register.html', {'form': form})
 
 def login_view(request):
