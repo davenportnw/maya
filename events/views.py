@@ -94,6 +94,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Registration successful. Please login.')
             return redirect('events:login') 
         else:
             print(form.errors)
