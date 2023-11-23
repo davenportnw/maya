@@ -29,7 +29,7 @@
                     <input type="text" name="event_name" id="event_name" class="form-control form-control" placeholder="Enter Event Name">
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-outline-secondary ">Add Event</button>
+                    <button type="submit" class="btn btn-outline-primary">Add Event</button>
                 </div>
             </form>
         </div>
@@ -70,5 +70,9 @@
         <br/>
         {% endfor %}
     </ul>
+    <form action="{% url 'events:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">Logout</button>
+    </form> 
 </body>
 </html>
