@@ -49,15 +49,6 @@
                         <button type="submit" class="btn btn-primary btn-lg">{{ event }}</button>
                     </div>
                 </form>
-                <div class="row">
-                    <div class="col text-start"> 
-                        <form method="post" action="{% url 'events:delete_event' event.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link">Delete</button>
-                        </form>
-                    </div>
-                </div>
-
                 <ul>
                     {% for occurrence in event.occurrence_set.all|dictsortreversed:"timestamp" %}
                     <li>{{ occurrence.timestamp|date:"N j, Y" }}
@@ -65,6 +56,12 @@
                     </li>
                     {% endfor %}
                 </ul>
+            </div>
+            <div class="d-flex bg-transparent justify-content-end me-3">
+                <form method="post" action="{% url 'events:delete_event' event.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-light">X</button>
+                </form> 
             </div>
         </div>
         <br/>
