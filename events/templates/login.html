@@ -3,18 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .container {
-            margin-top: 20vh; /* Adjust the top margin to your liking */
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
-<div class='container align-items-center vh-100'>
-    <div class='row justify-content-center'>
-        <div class='col-md-6'>
+<div class="container align-items-center vh-100">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
             <h1 class="text-center mt-5">maya</h1>
             <div class="card">
                 <div class="card-header">
@@ -23,10 +18,30 @@
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="d-flex">
-                            <button type="submit" class="btn btn-primary mr-4">Login</button>
-                            <button type="button" onclick="location.href='{% url 'events:register' %}'" class="btn btn-secondary">Register</button>
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                            <input type="{{ form.username.field.widget.input_type }}" name="{{ form.username.name }}"
+                                id="{{ form.username.id_for_label }}" class="form-control" value="{{ form.username.value|default_if_none:'' }}"
+                                required>
+                            {% for error in form.username.errors %}
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                            <input type="{{ form.password.field.widget.input_type }}" name="{{ form.password.name }}"
+                                id="{{ form.password.id_for_label }}" class="form-control" required>
+                            {% for error in form.password.errors %}
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="d-flex  justify-content-center">
+                            <button type="submit" class="btn btn-primary me-4">Login</button>
+                            <button type="button" onclick="location.href='{% url 'events:register' %}'" class="btn btn-secondary ml-4">Register</button>
                         </div>
                     </form>
                 </div>
