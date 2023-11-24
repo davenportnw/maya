@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 {% load static %}
 {% load bootstrap5 %}
 {% bootstrap_css %}
@@ -16,9 +17,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+    {% block content %}
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <h1>maya</h1>
             <br/>
             <h3><i>Edit Occurrences For: {{ occurrence.event.name }}</i></h3>
             <div class="card">
@@ -53,5 +54,6 @@
         <a href="{% url 'events:index' %}" class="btn btn-secondary mt-2">Back to Homepage</a>
         </div>
     </div>
+    {% endblock %}
 </body>
 </html>
