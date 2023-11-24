@@ -11,9 +11,11 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth import logout
 
 @login_required
-def index(request):
-    events = Event.objects.prefetch_related('occurrence_set').all()
+def index(request):    
+    events = Event.objects.prefetch_related('occurrence_set').filter(user=request.user)
     return render(request, "base.html", {'events': events})
+
+
 @login_required
 def add_event(request):
      if request.method == "POST":
@@ -21,11 +23,11 @@ def add_event(request):
 
         if event_name:
             # Try to get an event with a case-insensitive match
-            event = Event.objects.filter(name__iexact=event_name).first()
+            event = Event.objects.filter(name__iexact=event_name, user=request.user).first()
 
             # If event does not exist, create a new one
             if not event:
-                event = Event.objects.create(name=event_name)
+                event = Event.objects.create(name=event_name, user=request.user)
 
             # Create a new EventDetail for this event
             Occurrence.objects.create(event=event, timestamp=timezone.now())
