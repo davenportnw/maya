@@ -6,69 +6,21 @@
 <html>
 <head>
     <title>Maya</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <body>
-    <h1>maya</h1>
-    <div class="row justify-content-center">
-        <div class="col-md-3">
-            {% if messages %}
-                <div class="container">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-warning d-flex align-items-center " role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            <form method="post" action="{% url 'events:add_event' %}" class="form-text">
-                {% csrf_token %}
-                <div class="mb-3"> 
-                    <input type="text" name="event_name" id="event_name" class="form-control form-control" placeholder="Enter Event Name">
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-outline-primary">Add Event</button>
-                </div>
-            </form>
+    <main>
+        <h1>maya</h1>
+        {% block content %}
+        <!-- This block will be overridden by child templates -->
+        {% endblock %}
+    </main>
+    <footer>
+        <div class="d-flex justify-content-center mt-4 text-muted">
+            <p class="">© ByteBloom LLC</p>
         </div>
-    </div>
-    <ul> 
-        {% for event in events %}
-        <div class="card">
-            <div class="card-body">
-                <form method="post" action="{% url 'events:add_timestamp' event.id %}">
-                    {% csrf_token %}
-                    {% if event.emoji %}
-                    <div class="card-header text-center" style="font-size: 4em">
-                        {{ event.emoji|safe }}
-                    </div>
-                    {% endif %}
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">{{ event }}</button>
-                    </div>
-                </form>
-                <ul>
-                    {% for occurrence in event.occurrence_set.all|dictsortreversed:"timestamp" %}
-                    <li>{{ occurrence.timestamp|date:"N j, Y" }}
-                        <button onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="btn btn-link">Edit</button>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="d-flex bg-transparent justify-content-end me-3">
-                <form method="post" action="{% url 'events:delete_event' event.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-light">X</button>
-                </form> 
-            </div>
-        </div>
-        <br/>
-        {% endfor %}
-    </ul>
-    <div class="d-flex justify-content-center mt-4">
-        <button onclick="window.location.href='{% url 'events:logout' %}'" class="btn btn-secondary">Logout</button>
-    </div>
+    </footer>
 </body>
 </html>

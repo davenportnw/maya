@@ -13,7 +13,7 @@ from django.contrib.auth import logout
 @login_required
 def index(request):    
     events = Event.objects.prefetch_related('occurrence_set').filter(user=request.user)
-    return render(request, "base.html", {'events': events})
+    return render(request, "home.html", {'events': events})
 
 
 @login_required
