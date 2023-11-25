@@ -61,8 +61,17 @@
             <div class="d-flex bg-transparent justify-content-end me-3">
                 <form method="post" action="{% url 'events:delete_event' event.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-light">X</button>
+                    <button type="submit"  onclick="confirmDelete()" class="btn btn-light">X</button>
                 </form> 
+                <script>
+                    function confirmDelete() {
+                        var result = confirm("Are you sure you want to delete this event?");
+                        if (result) {
+                            // If the user confirmed, submit the form
+                            document.getElementById('delete-form').submit();
+                        }
+                    }
+                    </script>
             </div>
         </div>
         <br/>

@@ -71,6 +71,7 @@ def edit_occurrence(request, occurrence_id=None):
                 converted_timestamp = datetime.strptime(timestamp_str, '%m/%d/%Y')
                 occurrence.timestamp = converted_timestamp
                 occurrence.save()
+                messages.success(request, 'Update successful.')
             except ValueError:
                 # Handle the error if the date format is incorrect
                 pass
@@ -86,6 +87,7 @@ def delete_event(request, event_id):
 
     if request.method == 'POST':
         event.delete()
+        messages.success(request, 'Deletion successful.')
         return redirect('events:index')
 
     # If not POST, redirect back (or to some other page)
