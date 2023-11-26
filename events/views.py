@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Event, EventDetail
+from .models import Event, Occurrence
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from datetime import datetime
-
+from django.views import generic
+from .forms import EventForm
+from django.contrib import messages
 def index(request):
-    events = Event.objects.prefetch_related('eventdetail_set').all()
-    return render(request, "landing/base.html", {'events': events})
+    events = Event.objects.prefetch_related('occurrence_set').all()
+    return render(request, "base.html", {'events': events})
 
 def add_event(request):
      if request.method == "POST":
@@ -21,18 +23,24 @@ def add_event(request):
                 event = Event.objects.create(name=event_name)
 
             # Create a new EventDetail for this event
-            EventDetail.objects.create(event=event, timestamp=timezone.now())
-
+            Occurrence.objects.create(event=event, timestamp=timezone.now())
+    
             # Redirect to the list page or some confirmation page
             return HttpResponseRedirect('/events/') 
-            
+        else:
+            # Add a message for empty event name
+            messages.error(request, 'Please write an event name.')
+
+        return HttpResponseRedirect('/events/')
+     
+     
 def add_timestamp(request, event_id):
     if request.method == "POST":
         # Get the event by ID
         event = Event.objects.get(id=event_id)
         
         # Create a new EventDetail for this event
-        EventDetail.objects.create(event=event, timestamp=timezone.now())
+        Occurrence.objects.create(event=event, timestamp=timezone.now())
 
         # Redirect back to the same page
         return HttpResponseRedirect('/events/')
@@ -40,39 +48,31 @@ def add_timestamp(request, event_id):
         # Handle the case where the method is not POST
         return HttpResponseRedirect('/events/')
 
-def edit_event(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    return render(request, 'edit_event/edit_event.html', {'event': event})
-
-def update_timestamp(request, detail_id):
-    detail = get_object_or_404(EventDetail, id=detail_id)
+def edit_occurrence(request, occurrence_id=None):
+    occurrence = get_object_or_404(Occurrence, id=occurrence_id)
 
     if request.method == 'POST':
+        # Check if this is a delete action
+        if request.POST.get('action') == 'delete':
+            occurrence.delete()
+            return redirect('events:index')
+
+        # Handle the save action (updating the timestamp)
         timestamp_str = request.POST.get('timestamp')
-        
-        # Convert string to datetime object
-        try:
-            converted_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M')
-            detail.timestamp = converted_timestamp
-            detail.save()
-            return redirect('events:edit_event', event_id=detail.event.id)
-        except ValueError:
-            # Handle the error if the date format is incorrect
-            # You might want to add some form of user notification here
+        if timestamp_str:
+            try:
+                converted_timestamp = datetime.strptime(timestamp_str, '%m/%d/%Y')
+                occurrence.timestamp = converted_timestamp
+                occurrence.save()
+            except ValueError:
+                # Handle the error if the date format is incorrect
+                pass
+            return redirect('events:index')
+        else:
+            # Handle the case where timestamp is None
             pass
 
-    return redirect('events:edit_event', event_id=detail.event.id)
-
-def delete_timestamp(request, detail_id):
-    detail = get_object_or_404(EventDetail, id=detail_id)
-
-    if request.method == 'POST':
-        event_id = detail.event.id
-        detail.delete()
-        return redirect('events:edit_event', event_id=event_id)
-
-    # If not POST, redirect back (or to some other page)
-    return redirect('events:edit_event', event_id=detail.event.id)
+    return render(request, 'edit_occurrence.html', {'occurrence': occurrence})
 
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
