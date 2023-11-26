@@ -1,0 +1,27 @@
+<!-- edit_event.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Event</title>
+</head>
+<body>
+    <h1>Edit Event: {{ event.name }}</h1>
+    <!-- <ul>
+        {% for detail in event.eventdetail_set.all %}
+            <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
+        {% endfor %}
+    </ul> -->
+    {% for detail in event.eventdetail_set.all %}
+        <form method="post" action="{% url 'events:update_timestamp' detail.id %}">
+            {% csrf_token %}
+            <input type="text" name="timestamp" value="{{ detail.timestamp|date:'Y-m-d H:i' }}">
+            <button type="submit">Update Timestamp</button>
+        </form>
+        <form method="post" action="{% url 'events:delete_timestamp' detail.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    {% endfor %}
+    <a href="{% url 'events:index' %}" class="back-button">Back to Homepage</a>
+</body>
+</html>

@@ -19,12 +19,18 @@
         <form method="post" action="{% url 'events:add_timestamp' event.id %}">
             {% csrf_token %}
             <button type="submit">{{ event }}</button>
+            <a href="{% url 'events:edit_event' event.id %}">Edit</a> 
+        </form>
+        <form method="post" action="{% url 'events:delete_event' event.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Delete Event</button>
         </form>
                 <ul>
                     {% for detail in event.eventdetail_set.all %}
                     <li>{{ detail.timestamp|date:"N j, Y g:i a" }}</li>
                     {% endfor %}
                 </ul>
+        
         {% endfor %}
     </ul>
 </body>
