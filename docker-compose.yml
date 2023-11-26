@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8888
+    volumes:
+      - .:/app
+    ports:
+      - "8888:8888"
+    environment:
+      - DEBUG=1
