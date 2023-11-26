@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<body>
+{% block content %}
+<div class="container align-items-center vh-100">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Login</h3>
+                </div>
+                {% if messages %}
+                <div class="container">
+                    {% for message in messages %}
+                        <div class="alert alert-success mt-4" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                            <input type="{{ form.username.field.widget.input_type }}" name="{{ form.username.name }}"
+                                id="{{ form.username.id_for_label }}" class="form-control" value="{{ form.username.value|default_if_none:'' }}"
+                                required>
+                            {% for error in form.username.errors %}
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                            <input type="{{ form.password.field.widget.input_type }}" name="{{ form.password.name }}"
+                                id="{{ form.password.id_for_label }}" class="form-control" required>
+                            {% for error in form.password.errors %}
+                                <div class="invalid-feedback" style="display: block;">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="d-flex  justify-content-center">
+                            <button type="submit" class="btn btn-primary me-4">Login</button>
+                            <button type="button" onclick="location.href='{% url 'events:register' %}'" class="btn btn-secondary ml-4">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

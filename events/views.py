@@ -3,24 +3,31 @@ from .models import Event, Occurrence
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from datetime import datetime
-from django.views import generic
-from .forms import EventForm
 from django.contrib import messages
-def index(request):
-    events = Event.objects.prefetch_related('occurrence_set').all()
-    return render(request, "base.html", {'events': events})
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from .forms import CustomUserCreationForm
+from django.contrib.auth import logout
 
+@login_required
+def index(request):    
+    events = Event.objects.prefetch_related('occurrence_set').filter(user=request.user)
+    return render(request, "home.html", {'events': events})
+
+
+@login_required
 def add_event(request):
      if request.method == "POST":
         event_name = request.POST.get('event_name').strip()
 
         if event_name:
             # Try to get an event with a case-insensitive match
-            event = Event.objects.filter(name__iexact=event_name).first()
+            event = Event.objects.filter(name__iexact=event_name, user=request.user).first()
 
             # If event does not exist, create a new one
             if not event:
-                event = Event.objects.create(name=event_name)
+                event = Event.objects.create(name=event_name, user=request.user)
 
             # Create a new EventDetail for this event
             Occurrence.objects.create(event=event, timestamp=timezone.now())
@@ -33,7 +40,7 @@ def add_event(request):
 
         return HttpResponseRedirect('/events/')
      
-     
+@login_required
 def add_timestamp(request, event_id):
     if request.method == "POST":
         # Get the event by ID
@@ -47,7 +54,7 @@ def add_timestamp(request, event_id):
     else:
         # Handle the case where the method is not POST
         return HttpResponseRedirect('/events/')
-
+@login_required
 def edit_occurrence(request, occurrence_id=None):
     occurrence = get_object_or_404(Occurrence, id=occurrence_id)
 
@@ -64,6 +71,7 @@ def edit_occurrence(request, occurrence_id=None):
                 converted_timestamp = datetime.strptime(timestamp_str, '%m/%d/%Y')
                 occurrence.timestamp = converted_timestamp
                 occurrence.save()
+                messages.success(request, 'Update successful.')
             except ValueError:
                 # Handle the error if the date format is incorrect
                 pass
@@ -79,7 +87,42 @@ def delete_event(request, event_id):
 
     if request.method == 'POST':
         event.delete()
+        messages.success(request, 'Deletion successful.')
         return redirect('events:index')
 
     # If not POST, redirect back (or to some other page)
     return redirect('events:index')
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Registration successful. Please login.')
+            return redirect('events:login') 
+        else:
+            print(form.errors)
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('events:index')  # Redirect to a home page or dashboard
+            else:
+                # Invalid login
+                pass
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('events:index') 
