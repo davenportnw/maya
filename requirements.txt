@@ -9,3 +9,4 @@ pydantic_core==2.14.3
 soupsieve==2.5
 sqlparse==0.4.4
 typing_extensions==4.8.0
+uwsgi==2.0.19.1
