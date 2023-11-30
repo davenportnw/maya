@@ -6,13 +6,23 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
+from django.db.models import Subquery, OuterRef
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth import logout
 
+
 @login_required
 def index(request):    
-    events = Event.objects.prefetch_related('occurrence_set').filter(user=request.user)
+    subquery = Occurrence.objects.filter(
+        event=OuterRef('pk')
+    ).order_by('-timestamp')
+
+    events = Event.objects.filter(
+        user=request.user
+    ).annotate(
+        timestamp=Subquery(subquery.values('timestamp')[:1])
+    ).order_by('-timestamp')
     return render(request, "home.html", {'events': events})
 
 
