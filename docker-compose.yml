@@ -5,7 +5,16 @@ services:
     build: .
     volumes:
       - .:/app
-    ports:
-      - "8888:8888"
+    expose:
+      - "8888" 
     environment:
       - DEBUG=1
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"  # Map port 80 on the host to port 80 in the Nginx container
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /Users/nicoledavenport/maya/events/static:/Users/nicoledavenport/maya/events/static
+    depends_on:
+      - web
