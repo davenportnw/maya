@@ -12,5 +12,11 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 
+# Install uWSGI
+RUN pip install uwsgi
+
 # Copy project
 COPY . /app/
+
+# Start uWSGI
+CMD ["uwsgi", "--http", ":8888", "--module", "maya.wsgi:application"]
