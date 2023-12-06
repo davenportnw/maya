@@ -15,6 +15,9 @@ RUN pip install -r requirements.txt
 # Install uWSGI
 RUN pip install uwsgi
 
+# Install PostgreSQL development libraries
+RUN apt-get update && apt-get install -y libpq-dev
+
 # Copy project
 COPY . /app/
 
