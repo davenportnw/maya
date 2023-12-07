@@ -1,7 +1,19 @@
 version: '3.8'
 
 services:
+  db:
+    platform: linux/amd64
+    image: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      -  postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
   web:
+    platform: linux/amd64
     build: .
     volumes:
       - .:/app
@@ -10,6 +22,7 @@ services:
     environment:
       - DEBUG=1
   nginx:
+    platform: linux/amd64
     image: nginx:latest 
     user: "root"
     ports:
@@ -21,3 +34,5 @@ services:
       - /etc/nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
       - web
+volumes:
+    postgres_data:
