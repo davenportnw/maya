@@ -88,10 +88,10 @@ WSGI_APPLICATION = 'maya.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'default_db_name'),
-        'USER': os.getenv('POSTGRES_USER', 'default_db_user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'default_db_password'),
-        'HOST': 'db',  # Name of the service in docker-compose
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),  # Name of the service in docker-compose
         'PORT': '5432',
     }
 }
