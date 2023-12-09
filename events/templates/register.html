@@ -16,7 +16,7 @@
                         <h3>Register</h3>
                         <form action="{% url 'events:login' %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-secondary">Back</button>
+                            <button type="submit" class="btn"  style="background-color: #86A08C; border-color: #86A08C; color:white;">Back</button>
                         </form> 
                     </div>
                     <div class="card-body">
@@ -36,7 +36,7 @@
                                     {% endfor %}
                                 </div>
                             {% endfor %}
-                            <button type="submit" class="btn btn-primary w-100">Register</button>
+                            <button type="submit" class="btn w-100" style="background-color: #092C27; border-color: #092C27; color:white;">Register</button>
                         </form>
                     </div>
                 </div>
