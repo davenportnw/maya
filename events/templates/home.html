@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <body>
     {% block content %}
     <div class="container">
@@ -30,69 +29,73 @@
                 <form method="post" action="{% url 'events:add_event' %}" class="form-text">
                     {% csrf_token %}
                     <div class="mb-3">  
-                        <input type="text" name="event_name" id="event_name" class="form-control form-control" placeholder="Enter Event Name">
+                        <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Enter Event Name">
                     </div>
                     <!-- Add Evnt Btn -->
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-outline-primary">Add Event</button>
+                        <button type="submit" class="btn" style="border-color: #86A08C; color:#86A08C; ">Add Event</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="row justify-content-center">
         <ul> 
             {% for event in events %}
-            <div class="card">
-                <div class="card-body ">
-                    <form method="post" action="{% url 'events:add_timestamp' event.id %}">
-                        {% csrf_token %}
-                        {% if event.emoji %}
-                        <div class="card-header text-center" style="font-size: 4em">
-                            {{ event.emoji|safe }}
-                        </div>
-                        {% endif %}
-                        <!-- Event Name -->
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">{{ event }}</button>
-                        </div>
-                    </form>
-                    <ul>
-                        <!-- Occurrences -->
-                        {% for occurrence in event.occurrence_set.all|dictsortreversed:"timestamp" %}
-                        <li>{{ occurrence.timestamp|date:"N j, Y" }}
-                            <button onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="btn btn-link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                                  </svg>
-                            </button>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="d-flex bg-transparent justify-content-end me-3 " onsubmit="return confirmDelete(event)">
-                    <form method="post" action="{% url 'events:delete_event' event.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-light">X</button>
-                    </form> 
-                    <script>
-                        function confirmDelete() {
-                            var result = confirm("Are you sure you want to delete this event?");
-                            console.log('result: ', result);
-                            if (!result) {
-                                event.preventDefault();
-                                return false;
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body ">
+                        <form method="post" action="{% url 'events:add_timestamp' event.id %}">
+                            {% csrf_token %}
+                            {% if event.emoji %}
+                            <div class="card-header text-center" style="font-size: 4em">
+                                {{ event.emoji|safe }}
+                            </div>
+                            {% endif %}
+                            <!-- Event Name -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-lg" style="background-color: #86A08C; border-color: #86A08C;">{{ event }}</button>
+                            </div>
+                        </form>
+                        <ul>
+                            <!-- Occurrences -->
+                            {% for occurrence in event.occurrence_set.all|dictsortreversed:"timestamp" %}
+                            <li>{{ occurrence.timestamp|date:"N j, Y" }}
+                                <button onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="btn btn-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                    </svg>
+                                </button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Delete Event Button -->
+                    <div class="d-flex bg-transparent justify-content-end me-3 " onsubmit="return confirmDelete(event)">
+                        <form method="post" action="{% url 'events:delete_event' event.id %}">
+                            {% csrf_token %}
+                                <button type="submit" class="btn btn-light">X</button>  
+                        </form> 
+                        <script>
+                            function confirmDelete() {
+                                var result = confirm("Are you sure you want to delete this event?");
+                                console.log('result: ', result);
+                                if (!result) {
+                                    event.preventDefault();
+                                    return false;
+                                }
+                                return true;
                             }
-                            return true;
-                        }
-                    </script>
+                        </script>
+                    </div>
                 </div>
             </div>
             <br/>
             {% endfor %}
         </ul>
+        <!-- Logout -->
         <div class="d-flex justify-content-center mt-4">
-            <button onclick="window.location.href='{% url 'events:logout' %}'" class="btn btn-secondary">Logout</button>
+            <button onclick="window.location.href='{% url 'events:logout' %}'" class="btn" style="background-color: #092C27; border-color: #092C27; color:white;">Logout</button>
         </div>
     </div>
     {% endblock %}
