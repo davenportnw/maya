@@ -107,7 +107,14 @@ def edit_occurrence(request, occurrence_id=None):
                     messages.error(request, 'Invalid time format.')
             else:
                 messages.error(request, 'Time format does not match HH:MM.')
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
+    
+        # Handle the save action for notes
+        note_str = request.POST.get('note')
+        if note_str is not None:
+            occurrence.note = note_str
+            update_needed = True
+
         if update_needed:
             occurrence.save()
             messages.success(request, 'Update successful.')
