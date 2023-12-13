@@ -11,6 +11,7 @@ class Event(models.Model):
 
 class Occurrence(models.Model):
     timestamp =  models.DateField(default=timezone.now)
+    timeofday = models.DateTimeField(null=True)
     event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True)
     note = models.CharField(max_length=255, null=True)
     def __str__(self):
