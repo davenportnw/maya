@@ -58,7 +58,11 @@
                                         <ul style="list-style-type: none;">
                                             <!-- Occurrences -->
                                             {% for occurrence in event.occurrence_set.all|dictsortreversed:"timestamp" %}
-                                            <li>{{ occurrence.timestamp|date:"l, N j, Y" }}
+                                            <li>
+                                                {% if occurrence.timeofday %}
+                                                    {{ occurrence.timeofday|date:"h:i A" }}
+                                                {% endif %}
+                                                {{ occurrence.timestamp|date:"l, N j, Y" }}
                                                 <!-- Edit Occurrence -->
                                                 <button onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="btn btn-link">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#6F3313" class="bi bi-pencil" viewBox="0 0 16 16">

@@ -22,17 +22,25 @@
         <div class="col-md-4">
             <br/>
             <div class="mb-3 d-flex flex-column align-items-center">
-                <!-- Datepicker  -->
-                <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
-                    {% csrf_token %}
-                    <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
-                    <script>
-                        $(document).ready(function() {
-                            $('#datepicker-{{ occurrence.id }}').datepicker({
-                                uiLibrary: 'bootstrap5'
-                            });
-                        });
-                    </script>
+                <div class="row">
+                    <div class="col">
+                        <!-- Datepicker  -->
+                        <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
+                            {% csrf_token %}
+                            <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
+                            <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+                            <script>
+                                $(document).ready(function() {
+                                    $('#datepicker-{{ occurrence.id }}').datepicker({
+                                        uiLibrary: 'bootstrap5'
+                                    });
+                                    // $('#timepicker-{{ occurrence.id }}').timepicker({
+                                    //     uiLibrary: 'bootstrap5'
+                                    // });
+                                });
+                            </script>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <!-- Save button -->
