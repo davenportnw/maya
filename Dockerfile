@@ -34,4 +34,4 @@ RUN apt-get update && apt-get install -y libpq-dev
 COPY . /app/
 
 # Start uWSGI
-CMD ["uwsgi", "--http", ":8888", "--module", "maya.wsgi:application"]
+CMD ["uwsgi", "--http", ":8888", "--module", "maya.wsgi:application", "--master", "--workers=6", "--threads=2", "--buffer-size=8192", "--lazy-apps"]
