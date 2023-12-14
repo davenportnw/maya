@@ -16,6 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Grandiflora+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@1,200&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,10 +25,20 @@
         font-family: 'Bebas Neue', sans-serif;
         font-size: 75px;
     }
+    h4 {
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+    hr {
+        width: 8%;
+    }
 </style>
 <body>
     <main>
         <h1 class="d-flex justify-content-center mt-4">maya</h1>
+        <hr class="mx-auto"/>
+        <div class="d-flex justify-content-center mb-4">
+            <h4>Hello, {% if request.user.is_authenticated %}{{ request.user.first_name }}{% endif %}</h4>
+        </div>
         {% block content %}
         <!-- This block will be overridden by child templates -->
         {% endblock %}
