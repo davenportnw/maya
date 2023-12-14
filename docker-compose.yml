@@ -39,6 +39,7 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - /Users/nicoledavenport/maya/events/static:/Users/nicoledavenport/maya/events/static
       - /etc/nginx/ssl:/etc/nginx/ssl:ro
+      - /Users/nicoledavenport/maya/favicon.ico:/usr/share/nginx/html/favicon.ico
     depends_on:
       - web
 volumes:
