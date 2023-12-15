@@ -28,14 +28,14 @@
     h4 {
         font-family: 'Roboto Condensed', sans-serif;
     }
-    hr {
+    .hr-base {
         width: 8%;
     }
 </style>
 <body>
     <main>
         <h1 class="d-flex justify-content-center mt-4">maya</h1>
-        <hr class="mx-auto"/>
+        <hr class="mx-auto hr-base"/>
         {% block user_name %}
         <div class="d-flex justify-content-center mb-4">
             <h4>Hello, {% if request.user.is_authenticated %}{{ request.user.first_name }}{% endif %}</h4>
