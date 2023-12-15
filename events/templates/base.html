@@ -36,9 +36,11 @@
     <main>
         <h1 class="d-flex justify-content-center mt-4">maya</h1>
         <hr class="mx-auto"/>
+        {% block user_name %}
         <div class="d-flex justify-content-center mb-4">
             <h4>Hello, {% if request.user.is_authenticated %}{{ request.user.first_name }}{% endif %}</h4>
         </div>
+        {% endblock user_name %}
         {% block content %}
         <!-- This block will be overridden by child templates -->
         {% endblock %}
