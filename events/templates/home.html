@@ -57,7 +57,7 @@
                                             <!-- Occurrences -->
                                             {% for occurrence in event.occurrence_set.all|dictsortreversed:"timestamp" %}
                                             <li>
-                                                {{ occurrence.timestamp|date:"l, N j, Y" }}
+                                                {{ occurrence.timestamp|date:"D, N j, Y" }}
                                                 {% if occurrence.timeofday %}
                                                     ( {{ occurrence.timeofday|date:"h:i A" }} )
                                                 {% endif %}
