@@ -67,7 +67,7 @@
                                                         <li onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="cursor-pointer" {% if occurrence == most_recent_occurrence %} style="font-weight: bold;" {% endif %}>
                                                             {{ occurrence.timestamp|date:"D, N j, Y" }}
                                                             {% if occurrence.timeofday %}
-                                                                ( {{ occurrence.timeofday|date:"h:i A" }} )
+                                                                | {{ occurrence.timeofday|date:"h:i A" }}
                                                             {% endif %}
                                                         </li>
                                                         {% endfor %}
