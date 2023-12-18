@@ -122,6 +122,20 @@ def edit_occurrence(request, occurrence_id=None):
 
     return render(request, 'edit_occurrence.html', {'occurrence': occurrence})
 
+@login_required
+def edit_event(request, event_id=None):
+    event = get_object_or_404(Event, id=event_id)  # Replace 'Event' with your event model
+
+    if request.method == 'POST':
+        event_name = request.POST.get('event_name')
+        if event_name:
+            event.name = event_name  # Replace 'name' with your event name field
+            event.save()
+            messages.success(request, 'Event updated successfully.')
+            return redirect('events:index')
+
+    return render(request, 'edit_event.html', {'event': event})
+
 
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
