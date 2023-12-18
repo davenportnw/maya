@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Event, Occurrence
 from django.utils import timezone
@@ -64,33 +66,55 @@ def add_timestamp(request, event_id):
     else:
         # Handle the case where the method is not POST
         return HttpResponseRedirect('/events/')
+
+
 @login_required
 def edit_occurrence(request, occurrence_id=None):
     occurrence = get_object_or_404(Occurrence, id=occurrence_id)
 
     if request.method == 'POST':
+
         # Check if this is a delete action
         if request.POST.get('action') == 'delete':
             occurrence.delete()
+            messages.success(request, 'Occurrence deleted successfully.')
             return redirect('events:index')
 
-        # Handle the save action (updating the timestamp)
+        update_needed = False
+
+        # Handle the save action for the timestamp
         timestamp_str = request.POST.get('timestamp')
         if timestamp_str:
             try:
                 converted_timestamp = datetime.strptime(timestamp_str, '%m/%d/%Y')
                 occurrence.timestamp = converted_timestamp
-                occurrence.save()
-                messages.success(request, 'Update successful.')
+                update_needed = True
             except ValueError:
-                # Handle the error if the date format is incorrect
-                pass
+                messages.error(request, 'Invalid date format.')
+
+        # Handle the save action for the time of day
+        timeofday_str = request.POST.get('timeofday')
+        if timeofday_str:
+            if re.match(r'^\d{2}:\d{2}$', timeofday_str):
+                try:
+                    time_of_day = datetime.strptime(timeofday_str, '%H:%M').time()
+                    if timestamp_str:
+                        occurrence.timeofday = datetime.combine(occurrence.timestamp.date(), time_of_day)
+                    else:
+                        occurrence.timeofday = datetime.combine(occurrence.timestamp.date(), time_of_day)
+                    update_needed = True
+                except ValueError:
+                    messages.error(request, 'Invalid time format.')
+            else:
+                messages.error(request, 'Time format does not match HH:MM.')
+        import ipdb; ipdb.set_trace()
+        if update_needed:
+            occurrence.save()
+            messages.success(request, 'Update successful.')
             return redirect('events:index')
-        else:
-            # Handle the case where timestamp is None
-            pass
 
     return render(request, 'edit_occurrence.html', {'occurrence': occurrence})
+
 
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
