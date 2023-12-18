@@ -9,10 +9,18 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+class OccurrenceManager(models.Manager):
+    def get_queryset(self):
+        # Override the default queryset to sort by timeofday in descending order when it's not null
+        return super().get_queryset().order_by('-timeofday')
+
 class Occurrence(models.Model):
-    timestamp =  models.DateField(default=timezone.now)
+    timestamp = models.DateField(default=timezone.now)
     timeofday = models.DateTimeField(null=True)
     event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True)
     note = models.CharField(max_length=255, null=True)
+
+    objects = OccurrenceManager()
+
     def __str__(self):
         return  f"{self.timestamp.strftime('%Y-%m-%d')}"

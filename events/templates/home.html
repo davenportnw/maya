@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -7,7 +6,6 @@
 <html>
 <head>
     <title>Maya</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'home.css' %}">
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <body>
@@ -20,7 +18,7 @@
                     {% if messages %}
                         <div class="container">
                             {% for message in messages %}
-                                <div class="alert alert-{{ message.tags }} alert-warning d-flex align-items-center " role="alert">
+                                <div class="alert alert-{{ message.tags }} alert-success d-flex align-items-center " role="alert">
                                     {{ message }}
                                 </div>
                             {% endfor %}
@@ -37,6 +35,12 @@
                             <button type="submit" class="btn" style="border-color: #86A08C; color:#86A08C;">Add Event</button>
                         </div>
                     </form>
+                    <style>
+                        .cursor-pointer:hover {
+                            text-decoration: underline;
+                        }
+
+                    </style>
                     <div class="row justify-content-center">
                         <ul> 
                             {% for event in events %}
@@ -55,23 +59,22 @@
                                                 <button type="submit" class="btn btn-lg" style="background-color: #86A08C; border-color: #86A08C;">{{ event }}</button>
                                             </div>
                                         </form>
-                                        <ul style="list-style-type: none;">
-                                            <!-- Occurrences -->
-                                            {% for occurrence in event.occurrence_set.all|dictsortreversed:"timestamp" %}
-                                            <li>
-                                                {% if occurrence.timeofday %}
-                                                    {{ occurrence.timeofday|date:"h:i A" }}
-                                                {% endif %}
-                                                {{ occurrence.timestamp|date:"l, N j, Y" }}
-                                                <!-- Edit Occurrence -->
-                                                <button onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="btn btn-link">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#6F3313" class="bi bi-pencil" viewBox="0 0 16 16">
-                                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-                                                    </svg>
-                                                </button>
-                                            </li>
-                                            {% endfor %}
-                                        </ul>
+                                        {% with event.occurrence_set.all|dictsortreversed:"timestamp" as occurrences %}
+                                            {% if occurrences %}
+                                                {% with occurrences.0 as most_recent_occurrence %}
+                                                    <ul class="list-unstyled overflow-auto" style="max-height: 150px;">
+                                                        {% for occurrence in occurrences %}
+                                                        <li onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="cursor-pointer" {% if occurrence == most_recent_occurrence %} style="font-weight: bold;" {% endif %}>
+                                                            {{ occurrence.timestamp|date:"D, N j, Y" }}
+                                                            {% if occurrence.timeofday %}
+                                                                | {{ occurrence.timeofday|date:"h:i A" }}
+                                                            {% endif %}
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endwith %}
+                                            {% endif %}
+                                        {% endwith %}
                                     </div>
                                     <!-- Delete Event Button -->
                                     <div class="d-flex bg-transparent justify-content-end me-3 " onsubmit="return confirmDelete(event)">
