@@ -62,7 +62,7 @@
                                         {% with event.occurrence_set.all|dictsortreversed:"timestamp" as occurrences %}
                                             {% if occurrences %}
                                                 {% with occurrences.0 as most_recent_occurrence %}
-                                                    <ul style="list-style-type: none;">
+                                                    <ul class="list-unstyled overflow-auto" style="max-height: 150px;">
                                                         {% for occurrence in occurrences %}
                                                         <li onclick="window.location.href='{% url 'events:edit_occurrence' occurrence.id %}'" class="cursor-pointer" {% if occurrence == most_recent_occurrence %} style="font-weight: bold;" {% endif %}>
                                                             {{ occurrence.timestamp|date:"D, N j, Y" }}
