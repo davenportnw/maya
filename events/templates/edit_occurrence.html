@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Event</title>
+    <title>Edit Occurence</title>
      {{ form.media }}
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -22,6 +22,7 @@
             <div class="mb-3 d-flex flex-column align-items-center">
                 <div class="row">
                     <div class="col">
+                        <p class="font-monospace">Edit occurence for {{event.name}} </p>
                         <!-- Datepicker  -->
                         <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
                             {% csrf_token %}
@@ -34,21 +35,21 @@
                             </div>
                             <div class="col">
                                 <div class="collapse multi-collapse" id="time">
-                                <div class="card card-body mb-3">
-                                    <!-- Time -->
-                                    <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
-                                </div>
+                                    <div class="card card-body mb-3">
+                                        <!-- Time -->
+                                        <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="collapse multi-collapse" id="note">
-                                <div class="card card-body">
-                                    <!-- Notes -->
-                                    <div class="input-group mt-3">
-                                        <!-- <span class="input-group-text">Notes</span> -->
-                                        <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
+                                    <div class="card card-body">
+                                        <!-- Notes -->
+                                        <div class="input-group mt-3">
+                                            <!-- <span class="input-group-text">Notes</span> -->
+                                            <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                             <script>
@@ -65,7 +66,7 @@
                         <!-- Save button -->
                         <button type="submit" class="btn me-2" style="border-color: #86A08C; color:#86A08C; ">✓</button>
                     </div>
-                </form>
+                            </form>
                     <div class="col text-end">
                         <form method="post"  action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}" onsubmit="return confirmDelete(event)">
                             {% csrf_token %}
