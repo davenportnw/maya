@@ -22,6 +22,7 @@
             <div class="mb-3 d-flex flex-column align-items-center">
                 <div class="row">
                     <div class="col">
+                        <p>Edit occurence for {{event.name}} </p>
                         <!-- Datepicker  -->
                         <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
                             {% csrf_token %}
@@ -65,7 +66,7 @@
                         <!-- Save button -->
                         <button type="submit" class="btn me-2" style="border-color: #86A08C; color:#86A08C; ">✓</button>
                     </div>
-                </form>
+                            </form>
                     <div class="col text-end">
                         <form method="post"  action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}" onsubmit="return confirmDelete(event)">
                             {% csrf_token %}

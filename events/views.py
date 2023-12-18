@@ -71,7 +71,7 @@ def add_timestamp(request, event_id):
 @login_required
 def edit_occurrence(request, occurrence_id=None):
     occurrence = get_object_or_404(Occurrence, id=occurrence_id)
-
+    event = occurrence.event
     if request.method == 'POST':
 
         # Check if this is a delete action
@@ -120,7 +120,7 @@ def edit_occurrence(request, occurrence_id=None):
             messages.success(request, 'Update successful.')
             return redirect('events:index')
 
-    return render(request, 'edit_occurrence.html', {'occurrence': occurrence})
+    return render(request, 'edit_occurrence.html', {'occurrence': occurrence, 'event': event})
 
 @login_required
 def edit_event(request, event_id=None):
