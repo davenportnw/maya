@@ -29,6 +29,10 @@
                             {% csrf_token %}
                             <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
                             <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+                            <div class="input-group mt-3">
+                                <span class="input-group-text">Notes</span>
+                                <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
+                              </div>
                             <script>
                                 $(document).ready(function() {
                                     $('#datepicker-{{ occurrence.id }}').datepicker({
