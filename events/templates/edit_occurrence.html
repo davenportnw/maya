@@ -22,7 +22,7 @@
             <div class="mb-3 d-flex flex-column align-items-center">
                 <div class="row">
                     <div class="col">
-                        <p>Edit occurence for {{event.name}} </p>
+                        <p class="font-monospace">Edit occurence for {{event.name}} </p>
                         <!-- Datepicker  -->
                         <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
                             {% csrf_token %}
