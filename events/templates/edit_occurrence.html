@@ -26,19 +26,36 @@
                         <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
                             {% csrf_token %}
                             <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
-                            <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
-                            <div class="input-group mt-3">
-                                <span class="input-group-text">Notes</span>
-                                <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
-                              </div>
+                            <div class="row justify-content-center">
+                                <div class="d-inline-flex gap-1 justify-content-between">
+                                    <button class="btn btn-outline-secondary col-md-6 mb-3" data-bs-toggle="collapse" href="#time" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Time</button>
+                                    <button class="btn  btn-outline-info col-md-6 mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#note" aria-expanded="false" aria-controls="multiCollapseExample2">Notes</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="collapse multi-collapse" id="time">
+                                <div class="card card-body mb-3">
+                                    <!-- Time -->
+                                    <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="collapse multi-collapse" id="note">
+                                <div class="card card-body">
+                                    <!-- Notes -->
+                                    <div class="input-group mt-3">
+                                        <!-- <span class="input-group-text">Notes</span> -->
+                                        <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                             <script>
                                 $(document).ready(function() {
                                     $('#datepicker-{{ occurrence.id }}').datepicker({
                                         uiLibrary: 'bootstrap5'
                                     });
-                                    // $('#timepicker-{{ occurrence.id }}').timepicker({
-                                    //     uiLibrary: 'bootstrap5'
-                                    // });
                                 });
                             </script>
                     </div>
