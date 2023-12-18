@@ -34,21 +34,21 @@
                             </div>
                             <div class="col">
                                 <div class="collapse multi-collapse" id="time">
-                                <div class="card card-body mb-3">
-                                    <!-- Time -->
-                                    <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
-                                </div>
+                                    <div class="card card-body mb-3">
+                                        <!-- Time -->
+                                        <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="collapse multi-collapse" id="note">
-                                <div class="card card-body">
-                                    <!-- Notes -->
-                                    <div class="input-group mt-3">
-                                        <!-- <span class="input-group-text">Notes</span> -->
-                                        <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
+                                    <div class="card card-body">
+                                        <!-- Notes -->
+                                        <div class="input-group mt-3">
+                                            <!-- <span class="input-group-text">Notes</span> -->
+                                            <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                             <script>
