@@ -13,7 +13,6 @@ from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth import logout
 
-
 @login_required
 def index(request):    
     subquery = Occurrence.objects.filter(
@@ -173,7 +172,16 @@ def login_view(request):
                 return redirect('events:index')  # Redirect to a home page or dashboard
             else:
                 # Invalid login
-                pass
+                 messages.error(request, 'Invalid username or password.')
+        else:
+            for error in form.non_field_errors():
+                print('Non-field error: ', error)
+                messages.error(request, error)
+
+            for field in form.errors:
+                for error in form[field].errors:
+                    print(f'Field error in {field}: ', error)
+                    messages.error(request, error)
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
