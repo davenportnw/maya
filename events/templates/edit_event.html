@@ -25,7 +25,8 @@
                     <div class="col">
                         <form method="post" action="{% url 'events:edit_event' event.id %}">
                             {% csrf_token %}
-                            <label for="event_name" class="font-monospace">Update '{{event.name}}' Name:</label>
+                            <label for="event_name" class="font-monospace text-wrap">Update Name For:</label>
+                            <label for="event_name" class="font-monospace text-wrap">{{ event.name|truncatechars:20 }}'</label>
                             <div class="row align-items-center">
                                 <div class="col-9">
                                     <input type="text" class="form-control" id="event_name" name="event_name" value="{{ event.name }}">
