@@ -44,12 +44,12 @@ def add_event(request):
             Occurrence.objects.create(event=event, timestamp=timezone.now())
     
             # Redirect to the list page or some confirmation page
-            return HttpResponseRedirect('/events/') 
+            return HttpResponseRedirect('/') 
         else:
             # Add a message for empty event name
             messages.error(request, 'Please write an event name.')
 
-        return HttpResponseRedirect('/events/')
+        return HttpResponseRedirect('/')
      
 @login_required
 def add_timestamp(request, event_id):
@@ -61,10 +61,10 @@ def add_timestamp(request, event_id):
         Occurrence.objects.create(event=event, timestamp=timezone.now())
 
         # Redirect back to the same page
-        return HttpResponseRedirect('/events/')
+        return HttpResponseRedirect('/')
     else:
         # Handle the case where the method is not POST
-        return HttpResponseRedirect('/events/')
+        return HttpResponseRedirect('/')
 
 
 @login_required
@@ -77,7 +77,7 @@ def edit_occurrence(request, occurrence_id=None):
         if request.POST.get('action') == 'delete':
             occurrence.delete()
             messages.success(request, 'Occurrence deleted successfully.')
-            return redirect('events:index')
+            return redirect('index')
 
         update_needed = False
 
@@ -117,7 +117,7 @@ def edit_occurrence(request, occurrence_id=None):
         if update_needed:
             occurrence.save()
             messages.success(request, 'Update successful.')
-            return redirect('events:index')
+            return redirect('index')
 
     return render(request, 'edit_occurrence.html', {'occurrence': occurrence, 'event': event})
 
@@ -131,7 +131,7 @@ def edit_event(request, event_id=None):
             event.name = event_name  # Replace 'name' with your event name field
             event.save()
             messages.success(request, 'Event updated successfully.')
-            return redirect('events:index')
+            return redirect('index')
 
     return render(request, 'edit_event.html', {'event': event})
 
@@ -142,10 +142,10 @@ def delete_event(request, event_id):
     if request.method == 'POST':
         event.delete()
         messages.success(request, 'Deletion successful.')
-        return redirect('events:index')
+        return redirect('index')
 
     # If not POST, redirect back (or to some other page)
-    return redirect('events:index')
+    return redirect('index')
 
 def register(request):
     if request.method == 'POST':
@@ -153,7 +153,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Registration successful. Please login.')
-            return redirect('events:login') 
+            return redirect('login') 
         else:
             print(form.errors)
     else:
@@ -169,7 +169,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('events:index')  # Redirect to a home page or dashboard
+                return redirect('index')  # Redirect to a home page or dashboard
             else:
                 # Invalid login
                  messages.error(request, 'Invalid username or password.')
@@ -188,4 +188,4 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('events:index') 
+    return redirect('login') 
