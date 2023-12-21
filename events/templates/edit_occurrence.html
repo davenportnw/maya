@@ -22,7 +22,7 @@
             <div class="mb-3 d-flex flex-column align-items-center">
                 <div class="row">
                     <div class="col">
-                        <p class="font-monospace text-wrap">Edit occurence for:</p>
+                        <label class="font-monospace text-wrap">Edit occurence for:</label>
                         <p class="font-monospace text-wrap">{{ event.name|truncatechars:20 }}</p>
                         <!-- Datepicker  -->
                         <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
