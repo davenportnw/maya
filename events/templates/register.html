@@ -14,7 +14,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h3>Register</h3>
-                        <form action="{% url 'events:login' %}" method="post">
+                        <form action="{% url 'login' %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn"  style="background-color: #86A08C; border-color: #86A08C; color:white;">Back</button>
                         </form> 

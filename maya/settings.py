@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'supersecret-d994u%p0+v(%4k&^wttu^ml)n96+fy*h4eb0!9cft^o5u&o^j1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '192.168.1.110',
@@ -137,6 +137,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = 'events:index'  
-LOGIN_URL = '/events/login/'
+LOGIN_REDIRECT_URL = 'index'  
+LOGIN_URL = 'login'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
