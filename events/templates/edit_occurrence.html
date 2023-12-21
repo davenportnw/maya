@@ -25,7 +25,7 @@
                         <label class="font-monospace text-wrap">Edit occurence for:</label>
                         <p class="font-monospace text-wrap">{{ event.name|truncatechars:20 }}</p>
                         <!-- Datepicker  -->
-                        <form method="post" action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}">
+                        <form method="post" action="{% url 'edit_occurrence' occurrence_id=occurrence.id %}">
                             {% csrf_token %}
                             <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
                             <div class="row justify-content-center">
@@ -73,7 +73,7 @@
                     </div>
                             </form>
                     <div class="col text-end">
-                        <form method="post"  action="{% url 'events:edit_occurrence' occurrence_id=occurrence.id %}" onsubmit="return confirmDelete(event)">
+                        <form method="post"  action="{% url 'edit_occurrence' occurrence_id=occurrence.id %}" onsubmit="return confirmDelete(event)">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="delete">  
                             <!-- Delete Btn                               -->
@@ -91,7 +91,7 @@
                         </script>
                     </div>
                 </div>
-                <a href="{% url 'events:index' %}" class="btn" style="background-color: #092C27; border-color: #092C27; color:white;">
+                <a href="{% url 'index' %}" class="btn" style="background-color: #092C27; border-color: #092C27; color:white;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                       </svg>
