@@ -8,7 +8,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
-from django.db.models import Subquery, OuterRef
+from django.db.models import Subquery, OuterRef, Q
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth import logout
@@ -24,7 +24,21 @@ def index(request):
     ).annotate(
         timestamp=Subquery(subquery.values('timestamp')[:1])
     ).order_by('-timestamp')
-    return render(request, "home.html", {'events': events})
+
+    # Search/Filter
+     # Start with the basic query
+    query = Event.objects.filter(user=request.user)
+
+    # Handle the search query
+    search_query = request.GET.get('search', '')
+    if search_query:
+         query = query.filter(Q(name__icontains=search_query))
+
+    # Annotate and order the events
+    subquery = Occurrence.objects.filter(event=OuterRef('pk')).order_by('-timestamp')
+    events = query.annotate(timestamp=Subquery(subquery.values('timestamp')[:1])).order_by('-timestamp')
+
+    return render(request, "home.html", {'events': events, 'search_query': search_query})
 
 
 @login_required

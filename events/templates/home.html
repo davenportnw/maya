@@ -13,7 +13,7 @@
     <div class="container">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <!-- Messages -->
                     {% if messages %}
                         <div class="container">
@@ -27,12 +27,24 @@
                     <!-- Input Event -->
                     <form method="post" action="{% url 'events:add_event' %}" class="form-text">
                         {% csrf_token %}
-                        <div class="mb-3">  
-                            <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Enter Event Name">
-                        </div>
-                        <!-- Add Evnt Btn -->
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn" style="border-color: #86A08C; color:#86A08C;">Add Event</button>
+                        <div class="row justify-content-center">
+                            <div class="col-8 col-md-8">
+                                <input type="text" name="event_name" id="event_name" class="form-control w-100 py-4" placeholder="Enter Event Name">
+                            </div>
+                            <div class="col-2 col-md-2">
+                                <!-- Add Event Button -->
+                                <button type="submit" class="btn mb-2" style="border-color: #86A08C; color:#86A08C;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                                      </svg>
+                                </button>
+                                <!-- Filter Button -->
+                                <a class="btn mt-2" data-bs-toggle="collapse" href="#filter" role="button" style="border-color: #336863; color: #336863" aria-expanded="false" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                                        <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </form>
                     <style>
@@ -41,6 +53,19 @@
                         }
 
                     </style>
+                    <hr/>
+                    <!-- Search/Filter Form -->
+                    <div class="collapse multi-collapse" id="filter">
+                        <form method="get" action="{% url 'index' %}">
+                            <div class="row">
+                                <input type="text" name="search" value="{{ search_query }}" class="form-control w-100 py-2" placeholder="Search events">
+                                <button type="submit" class="btn mt-2 w-50" style="border-color: #092A25">Search</button>
+                                <a href="{% url 'index' %}" class="btn mt-2 w-50"style="border-color: #6F3313">Reset</a>
+                            </div>                                     
+                        </form>
+                    </div>
+    
+    
                     <div class="row justify-content-center">
                         <ul> 
                             {% for event in events %}
