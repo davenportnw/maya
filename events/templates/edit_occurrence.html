@@ -22,6 +22,7 @@
             <div class="mb-3 d-flex flex-column align-items-center">
                 <div class="row">
                     <div class="col">
+                        <!-- Edit Occurence Date -->
                         <label class="font-monospace text-wrap">Edit occurence for:</label>
                         <p class="font-monospace text-wrap">{{ event.name|truncatechars:20 }}</p>
                         <!-- Datepicker  -->
@@ -33,26 +34,22 @@
                                     <div class="col-12">
                                         <a class="btn col-md-6 mb-3  w-100" data-bs-toggle="collapse" href="#time" role="button" style="border-color: #336863; color: #336863" aria-expanded="false" aria-controls="multiCollapseExample1">Add/Edit Time</a>
                                     </div>
+                                    <div class="collapse multi-collapse" id="time">
+                                        <div class="mb-3">
+                                            <!-- Time -->
+                                            <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+                                        </div>
+                                    </div>
                                     <div class="col-12">
                                         <button class="btn col-md-6 mb-3  w-100" type="button" data-bs-toggle="collapse"  style="border-color: #D19A10; color:#D19A10;" data-bs-target="#note" aria-expanded="false" aria-controls="multiCollapseExample2">Add/Edit Note</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="collapse multi-collapse" id="time">
-                                    <div class="card card-body mb-3">
-                                        <!-- Time -->
-                                        <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="collapse multi-collapse" id="note">
-                                    <div class="card card-body">
-                                        <!-- Notes -->
-                                        <div class="input-group mt-3">
-                                            <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
-                                        </div>
+                                <div class="collapse multi-collapse {% if occurrence.note and occurrence.note != 'None' %}show{% endif %}" id="note">
+                                    <!-- Notes -->
+                                    <div class="input-group">
+                                        <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
                                     </div>
                                 </div>
                             </div>
