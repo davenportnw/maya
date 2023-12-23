@@ -41,6 +41,14 @@
                         }
 
                     </style>
+                    <hr/>
+                    <!-- Search Form -->
+                    <form method="get" action="{% url 'index' %}">
+                        <div class="form-group">
+                            <input type="text" name="search" value="{{ search_query }}" class="form-control" placeholder="Search events">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
                     <div class="row justify-content-center">
                         <ul> 
                             {% for event in events %}
