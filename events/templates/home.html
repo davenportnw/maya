@@ -47,8 +47,10 @@
                         <div class="form-group">
                             <input type="text" name="search" value="{{ search_query }}" class="form-control" placeholder="Search events">
                         </div>
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button type="submit" class="btn btn-primary mt-2">Filter</button>
+                        <a href="{% url 'index' %}" class="btn btn-secondary mt-2">Reset</a>
                     </form>
+    
                     <div class="row justify-content-center">
                         <ul> 
                             {% for event in events %}
