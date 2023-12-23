@@ -13,7 +13,7 @@
     <div class="container">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <!-- Messages -->
                     {% if messages %}
                         <div class="container">
@@ -27,12 +27,13 @@
                     <!-- Input Event -->
                     <form method="post" action="{% url 'events:add_event' %}" class="form-text">
                         {% csrf_token %}
-                        <div class="mb-3">  
-                            <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Enter Event Name">
-                        </div>
-                        <!-- Add Evnt Btn -->
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn" style="border-color: #86A08C; color:#86A08C;">Add Event</button>
+                        <div class="row justify-content-center">
+                            <div class="col-8 col-md-8">
+                                <input type="text" name="event_name" id="event_name" class="form-control w-100" placeholder="Enter Event Name">
+                            </div>
+                            <div class="col-2 col-md-2">
+                                <button type="submit" class="btn" style="border-color: #86A08C; color:#86A08C;">+</button>
+                            </div>
                         </div>
                     </form>
                     <style>
@@ -47,8 +48,14 @@
                         <div class="form-group">
                             <input type="text" name="search" value="{{ search_query }}" class="form-control" placeholder="Search events">
                         </div>
-                        <button type="submit" class="btn btn-primary mt-2">Filter</button>
-                        <a href="{% url 'index' %}" class="btn btn-secondary mt-2">Reset</a>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" class="btn mt-2 w-50" style="border-color: #092A25">Filter</button>
+                            </div>
+                            <div class="col text-end">
+                                <a href="{% url 'index' %}" class="btn mt-2 w-50"style="border-color: #6F3313">Reset</a>
+                            </div>  
+                        </div>                      
                     </form>
     
                     <div class="row justify-content-center">
