@@ -55,19 +55,13 @@
                     </style>
                     <hr/>
                     <!-- Search/Filter Form -->
-                    <div class="collapse multi-collapse col-8 col-md-8 " id="filter">
+                    <div class="collapse multi-collapse" id="filter">
                         <form method="get" action="{% url 'index' %}">
-                            <div class="form-group">
-                                <input type="text" name="search" value="{{ search_query }}" class="form-control" placeholder="Search events">
-                            </div>
                             <div class="row">
-                                <div class="col">
-                                    <button type="submit" class="btn mt-2 w-50" style="border-color: #092A25">Search</button>
-                                </div>
-                                <div class="col text-end">
-                                    <a href="{% url 'index' %}" class="btn mt-2 w-50"style="border-color: #6F3313">Reset</a>
-                                </div>  
-                            </div>                      
+                                <input type="text" name="search" value="{{ search_query }}" class="form-control w-100 py-2" placeholder="Search events">
+                                <button type="submit" class="btn mt-2 w-50" style="border-color: #092A25">Search</button>
+                                <a href="{% url 'index' %}" class="btn mt-2 w-50"style="border-color: #6F3313">Reset</a>
+                            </div>                                     
                         </form>
                     </div>
     
