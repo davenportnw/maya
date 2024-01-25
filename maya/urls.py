@@ -12,4 +12,6 @@ urlpatterns = [
     path('edit_occurrence/<int:occurrence_id>/', event_views.edit_occurrence, name='edit_occurrence'),
     path('edit_event/<int:event_id>/', event_views.edit_event, name='edit_event'),
     path('events/', include('events.urls'), name='events'),
+    path('password_reset/', event_views.password_reset_request, name='password_reset_request'),
+    path('password-reset-confirm/<uidb64>/<token>/', event_views.password_reset_confirm, name='password_reset_confirm'),
 ]
