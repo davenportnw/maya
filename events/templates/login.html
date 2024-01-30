@@ -21,17 +21,17 @@
                 {% if messages %}
                     <div class="messages">
                         {% for message in messages %}
-                            <div class="alert alert-danger">{{ message }}</div>
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
                         {% endfor %}
                     </div>
                 {% endif %}
             
                 <!-- Display non-field errors -->
-                {% if form.non_field_errors %}
+                <!-- {% if form.non_field_errors %}
                     {% for error in form.non_field_errors %}
                         <div class="alert alert-danger">{{ error }}</div>
                     {% endfor %}
-                {% endif %}
+                {% endif %} -->
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
