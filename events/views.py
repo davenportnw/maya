@@ -191,9 +191,6 @@ def login_view(request):
             # Handle field-specific errors
             for field_name in form.errors:
                 for error in form.errors[field_name]:
-                    print('request: ', request)
-                    print('error: ', error)
-                    print('field_name: ', field_name)
                     messages.error(request, error)
 
     else:
