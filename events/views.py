@@ -12,6 +12,8 @@ from django.db.models import Subquery, OuterRef, Q
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
+
 
 @login_required
 def index(request):    
@@ -180,26 +182,35 @@ def login_view(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+
+            # check if username exists in the database
+            user_exists = User.objects.filter(username=username).exists()
+
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('index')  # Redirect to a home page or dashboard
             else:
-                # Invalid login
-                 messages.error(request, 'Invalid username or password.')
+                if user_exists:
+                     # if user exists, password must be wrong 
+                     messages.error(request, 'Incorrect password.')
+                else:
+                    #username doesn't exist
+                    messages.error(request, 'Invalid Username')
         else:
+             # Handle non-field errors
             for error in form.non_field_errors():
-                print('Non-field error: ', error)
                 messages.error(request, error)
 
-            for field in form.errors:
-                for error in form[field].errors:
-                    print(f'Field error in {field}: ', error)
-                    messages.error(request, error)
+            # Handle field-specific errors
+            for field_name in form.errors:
+                for error in form.errors[field_name]:
+                    messages.error(request, f"Error in {field_name}: {error}")
+
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
 def logout_view(request):
     logout(request)
-    return redirect('login') 
+    return redirect('login')    
