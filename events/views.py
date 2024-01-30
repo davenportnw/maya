@@ -183,29 +183,18 @@ def login_view(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
 
-            # check if username exists in the database
-            user_exists = User.objects.filter(username=username).exists()
-
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('index')  # Redirect to a home page or dashboard
-            else:
-                if user_exists:
-                     # if user exists, password must be wrong 
-                     messages.error(request, 'Incorrect password.')
-                else:
-                    #username doesn't exist
-                    messages.error(request, 'Invalid Username')
         else:
-             # Handle non-field errors
-            for error in form.non_field_errors():
-                messages.error(request, error)
-
             # Handle field-specific errors
             for field_name in form.errors:
                 for error in form.errors[field_name]:
-                    messages.error(request, f"Error in {field_name}: {error}")
+                    print('request: ', request)
+                    print('error: ', error)
+                    print('field_name: ', field_name)
+                    messages.error(request, error)
 
     else:
         form = AuthenticationForm()
