@@ -212,8 +212,9 @@ def send_invitation(request, event_id):
         invitee_username = request.POST.get('invitee_username')
         invitee = get_object_or_404(User, username=invitee_username)
         CollaborationInvitation.objects.create(event=event, sender=request.user, invitee=invitee)
+        messages.success(request,'Invitation Sent!')
         # Redirect or show a success message
-    return redirect('some_view_name')
+    return redirect('index')
 
 def accept_invitation(request, invitation_id):
     invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user, accepted=None)  # Ensure it's a pending invitation
