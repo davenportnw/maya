@@ -38,6 +38,12 @@
                         </form>
                     </div>
                 </div>
+                <!-- Collaboration -->
+                <form method="post" action="{% url 'send_invitation' event.id %}">
+                    {% csrf_token %}
+                    <input type="text" name="invitee_username" placeholder="Username of collaborator">
+                    <button type="submit">Send Invitation</button>
+                </form>
                 <div class="row justify-content-center">
                      <!-- Back Button -->
                      <div class="col-auto">

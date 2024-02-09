@@ -68,6 +68,21 @@
     
                     <div class="row justify-content-center">
                         <ul> 
+                            <!-- collaborated events -->
+                            {% for invitation in received_invitations %}
+                                <div>
+                                    You've been invited to collaborate on {{ invitation.event.name }} by {{ invitation.sender.username }}.
+                                    <form method="post" action="{% url 'accept_invitation' invitation.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit">Accept</button>
+                                    </form>
+                                    <form method="post" action="{% url 'decline_invitation' invitation.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit">Decline</button>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                            <!-- User Events -->
                             {% for event in events %}
                             <div class="mb-4">
                                 <div class="card">

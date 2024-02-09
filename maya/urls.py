@@ -12,4 +12,5 @@ urlpatterns = [
     path('edit_occurrence/<int:occurrence_id>/', event_views.edit_occurrence, name='edit_occurrence'),
     path('edit_event/<int:event_id>/', event_views.edit_event, name='edit_event'),
     path('events/', include('events.urls'), name='events'),
+    path('event/<int:event_id>/send_invitation/', event_views.send_invitation, name='send_invitation'),
 ]

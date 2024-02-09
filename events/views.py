@@ -1,7 +1,7 @@
 import re
 
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Event, Occurrence
+from .models import Event, Occurrence, CollaborationInvitation
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from datetime import datetime
@@ -15,6 +15,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 
 
+#  ============= Homepage/Events =============
 @login_required
 def index(request):    
     subquery = Occurrence.objects.filter(
@@ -163,6 +164,8 @@ def delete_event(request, event_id):
     # If not POST, redirect back (or to some other page)
     return redirect('index')
 
+
+#  ============= Login/Registration  =============
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -200,3 +203,26 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')    
+
+
+#  ============= Collaborated Events =============
+def send_invitation(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        invitee_username = request.POST.get('invitee_username')
+        invitee = get_object_or_404(User, username=invitee_username)
+        CollaborationInvitation.objects.create(event=event, sender=request.user, invitee=invitee)
+        # Redirect or show a success message
+    return redirect('some_view_name')
+
+def accept_invitation(request, invitation_id):
+    invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user, accepted=None)  # Ensure it's a pending invitation
+    invitation.accepted = True
+    invitation.save()
+
+    # Add the invitee to the event's collaborators
+    event = invitation.event
+    event.collaborators.add(invitation.invitee)
+
+    # Redirect to a success page or the event detail page
+    return redirect('event_detail', event_id=event.id)
