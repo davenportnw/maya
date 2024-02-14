@@ -38,6 +38,16 @@
                         </form>
                     </div>
                 </div>
+                <!-- Messages -->
+                {% if messages %}
+                    <div class="container">
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} d-flex align-items-center " role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <!-- Collaboration -->
                 <form method="post" action="{% url 'send_invitation' event.id %}">
                     {% csrf_token %}

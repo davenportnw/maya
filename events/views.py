@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 #  ============= Homepage/Events =============
@@ -212,23 +213,35 @@ def logout_view(request):
 
 
 #  ============= Collaborated Events =============
-def send_invitation(request, event_id, invitee_username):
+def send_invitation(request, event_id):
+    invitee_username = request.POST.get('invitee_username')
+    event = get_object_or_404(Event, id=event_id)
+    sender = request.user
     if request.method == 'POST':
-        event = get_object_or_404(Event, id=event_id)
-        invitee = get_object_or_404(User, username=invitee_username)
-        # Assuming the sender is the logged-in user
-        sender = request.user
-
-        # Create and save the invitation
-        invitation = CollaborationInvitation.objects.create(
-            event=event,
-            sender=sender,
-            invitee=invitee,
-            accepted=None  # or leave this out if None is the default
-        )
-
-        messages.success('Invite Sent!')
-        # Redirect to a confirmation page, or handle as needed
+        try:
+            invitee = User.objects.get(username=invitee_username) 
+            # Prevent sending an invitation to oneself
+            if sender == invitee:
+                messages.error(request, "You cannot send an invitation to yourself.")
+                print("can't send invite to yourself bro")
+                return redirect('edit_event', event_id=event_id)
+            # Check if an invitation already exists
+            elif CollaborationInvitation.objects.filter(event=event, sender=sender, invitee=invitee).exists():
+                messages.error(request, "An invitation has already been sent to this user.")
+                return redirect('edit_event', event_id=event_id)
+            else:
+            # Create and save the invitation
+                CollaborationInvitation.objects.create(
+                    event=event,
+                    sender=sender,
+                    invitee=invitee,
+                    accepted=None  # or leave this out if None is the default
+                )
+                messages.success('Invite Sent!')
+            # Redirect to a confirmation page, or handle as needed
+        except User.DoesNotExist:
+            messages.error(request, 'Invalid Username')
+        return redirect('edit_event', event_id=event_id)
     return redirect('index')
 
 def accept_invitation(request, invitation_id):
