@@ -237,12 +237,12 @@ def send_invitation(request, event_id):
                     invitee=invitee,
                     accepted=None  # or leave this out if None is the default
                 )
-                messages.success('Invite Sent!')
+                messages.success(request,'Invite Sent!')
             # Redirect to a confirmation page, or handle as needed
         except User.DoesNotExist:
             messages.error(request, 'Invalid Username')
         return redirect('edit_event', event_id=event_id)
-    return redirect('index')
+    return redirect('edit_event', event_id=event_id)
 
 def accept_invitation(request, invitation_id):
     invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user, accepted=None)  # Ensure it's a pending invitation
