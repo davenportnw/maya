@@ -41,7 +41,13 @@ def index(request):
     subquery = Occurrence.objects.filter(event=OuterRef('pk')).order_by('-timestamp')
     events = query.annotate(timestamp=Subquery(subquery.values('timestamp')[:1])).order_by('-timestamp')
 
-    return render(request, "home.html", {'events': events, 'search_query': search_query})
+    # Handle collab events
+    # Fetch pending invitations for the current user
+    pending_invitations = CollaborationInvitation.objects.filter(
+        invitee=request.user, 
+        accepted=None  # Adjust if your logic for pending invitations differs
+    )
+    return render(request, "home.html", {'events': events, 'search_query': search_query, 'pending_invitations': pending_invitations})
 
 
 @login_required
@@ -206,14 +212,23 @@ def logout_view(request):
 
 
 #  ============= Collaborated Events =============
-def send_invitation(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
+def send_invitation(request, event_id, invitee_username):
     if request.method == 'POST':
-        invitee_username = request.POST.get('invitee_username')
+        event = get_object_or_404(Event, id=event_id)
         invitee = get_object_or_404(User, username=invitee_username)
-        CollaborationInvitation.objects.create(event=event, sender=request.user, invitee=invitee)
-        messages.success(request,'Invitation Sent!')
-        # Redirect or show a success message
+        # Assuming the sender is the logged-in user
+        sender = request.user
+
+        # Create and save the invitation
+        invitation = CollaborationInvitation.objects.create(
+            event=event,
+            sender=sender,
+            invitee=invitee,
+            accepted=None  # or leave this out if None is the default
+        )
+
+        messages.success('Invite Sent!')
+        # Redirect to a confirmation page, or handle as needed
     return redirect('index')
 
 def accept_invitation(request, invitation_id):
