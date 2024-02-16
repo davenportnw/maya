@@ -71,7 +71,11 @@
                                 {% for invitation in pending_invitations %}
                                     <div>
                                         <p>You've been invited to collaborate on "{{ invitation.event.name }}" by {{ invitation.sender.username }}.</p>
-                                        <!-- Include accept/decline buttons here -->
+                                        <div>
+                                            <p>Invitation to join {{ invitation.event.name }}</p>
+                                            <a href="{% url 'accept_invitation' invitation.id %}">Accept</a>
+                                            <a href="{% url 'decline_invitation' invitation.id %}">Decline</a>
+                                        </div>
                                     </div>
                                 {% endfor %}
                             {% else %}
@@ -91,7 +95,7 @@
                                             {% endif %}
                                             <!-- Event Name -->
                                             <div class="d-grid">
-                                                <button type="submit" class="btn btn-lg" style="background-color: #86A08C; border-color: #86A08C;">{{ event }}</button>
+                                                <button type="submit" class="btn btn-lg" style="background-color: #86A08C; border-color: #86A08C;">{{ event.name }}</button>
                                             </div>
                                         </form>
                                         <!-- Occurrences -->

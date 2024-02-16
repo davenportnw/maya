@@ -24,29 +24,22 @@ def index(request):
     ).order_by('-timestamp')
 
     events = Event.objects.filter(
-        user=request.user
+        Q(user=request.user) | Q(collaborators=request.user)
     ).annotate(
         timestamp=Subquery(subquery.values('timestamp')[:1])
-    ).order_by('-timestamp')
-
-    # Search/Filter
-     # Start with the basic query
-    query = Event.objects.filter(user=request.user)
+    ).distinct().order_by('-timestamp')
+    
 
     # Handle the search query
     search_query = request.GET.get('search', '')
     if search_query:
-         query = query.filter(Q(name__icontains=search_query))
-
-    # Annotate and order the events
-    subquery = Occurrence.objects.filter(event=OuterRef('pk')).order_by('-timestamp')
-    events = query.annotate(timestamp=Subquery(subquery.values('timestamp')[:1])).order_by('-timestamp')
+         events = events.filter(Q(name__icontains=search_query))
 
     # Handle collab events
     # Fetch pending invitations for the current user
     pending_invitations = CollaborationInvitation.objects.filter(
         invitee=request.user, 
-        accepted=None  # Adjust if your logic for pending invitations differs
+        accepted=None 
     )
     return render(request, "home.html", {'events': events, 'search_query': search_query, 'pending_invitations': pending_invitations})
 
@@ -96,7 +89,6 @@ def edit_occurrence(request, occurrence_id=None):
     occurrence = get_object_or_404(Occurrence, id=occurrence_id)
     event = occurrence.event
     if request.method == 'POST':
-
         # Check if this is a delete action
         if request.POST.get('action') == 'delete':
             occurrence.delete()
@@ -167,8 +159,6 @@ def delete_event(request, event_id):
         event.delete()
         messages.success(request, 'Deletion successful.')
         return redirect('index')
-
-    # If not POST, redirect back (or to some other page)
     return redirect('index')
 
 
@@ -245,13 +235,19 @@ def send_invitation(request, event_id):
     return redirect('edit_event', event_id=event_id)
 
 def accept_invitation(request, invitation_id):
-    invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user, accepted=None)  # Ensure it's a pending invitation
-    invitation.accepted = True
+    invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user, accepted=None)
+    if invitation.accepted is not True:
+        invitation.accepted = True
+        invitation.save()
+        messages.success(request, 'You have accepted the invitation.')
+        invitation.event.collaborators.add(request.user)
+    else:
+        messages.info(request, "You have already accepted this invitation")
+    return redirect('index')
+
+def decline_invitation(request, invitation_id):
+    invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user)
+    invitation.accepted = False
     invitation.save()
-
-    # Add the invitee to the event's collaborators
-    event = invitation.event
-    event.collaborators.add(invitation.invitee)
-
-    # Redirect to a success page or the event detail page
-    return redirect('event_detail', event_id=event.id)
+    messages.success(request, "You have declined the invitation.")
+    return redirect('index')  
