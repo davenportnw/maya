@@ -149,7 +149,11 @@ def edit_event(request, event_id=None):
             messages.success(request, 'Event updated successfully.')
             return redirect('index')
 
-    return render(request, 'edit_event.html', {'event': event})
+    invitations = CollaborationInvitation.objects.filter(event=event, accepted=None) 
+    invited_users_with_invitations = [
+        {'user': invitation.invitee, 'invitation_id': invitation.id} for invitation in invitations
+    ]
+    return render(request, 'edit_event.html', {'event': event, 'invited_users_with_invitations': invited_users_with_invitations, } )
 
 
 def delete_event(request, event_id):
@@ -251,3 +255,14 @@ def decline_invitation(request, invitation_id):
     invitation.save()
     messages.success(request, "You have declined the invitation.")
     return redirect('index')  
+
+def cancel_invitation(request, invitation_id):
+    invitation = get_object_or_404(CollaborationInvitation, pk=invitation_id)
+    print('before') 
+    # Ensure the request is made by the event owner or the one who sent the invite
+    if request.user == invitation.event.user:
+        invitation.delete()  # Or mark as canceled if you have a status field
+        messages.success(request, "Invitation canceled successfully.")
+    else:
+        messages.error(request, "You don't have permission to cancel this invitation.")
+    return HttpResponseRedirect(reverse('edit_event', args=[invitation.event.id]))

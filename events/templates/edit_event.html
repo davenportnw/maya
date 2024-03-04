@@ -54,6 +54,19 @@
                     <input type="text" name="invitee_username" placeholder="Username of collaborator">
                     <button type="submit">Send Invitation</button>
                 </form>
+                <ul>
+                    {% for item in invited_users_with_invitations %}
+                    <li>
+                        {{ item.user.username }}
+                        <form action="{% url 'cancel_invitation' invitation_id=item.invitation_id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Are you sure you want to cancel this invitation?');">X</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li>No users have been invited yet.</li>
+                {% endfor %}
+                </ul>
                 <div class="row justify-content-center">
                      <!-- Back Button -->
                      <div class="col-auto">
