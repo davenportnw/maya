@@ -91,10 +91,13 @@
                     <!-- Delete Button -->
                     <div class="col-auto">
                         <div class="d-flex bg-transparent justify-content-center" onsubmit="return confirmDelete('{{ event.name }}')">
-                            <form method="post" action="{% url 'events:delete_event' event.id %}">
-                                {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger">Delete Event</button>  
-                            </form> 
+                            {% if user == event.user %}
+                                <!-- Display delete button/link -->
+                                <form method="post" action="{% url 'events:delete_event' event.id %}">
+                                    {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger">Delete Event</button>  
+                                </form> 
+                            {% endif %}
                             <script>
                                 function confirmDelete(eventName) {
                                     var result = confirm("Are you sure you want to delete" + " ' " + eventName + " ' " + "event?");
