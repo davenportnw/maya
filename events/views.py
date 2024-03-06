@@ -269,3 +269,21 @@ def cancel_invitation(request, invitation_id):
     else:
         messages.error(request, "You don't have permission to cancel this invitation.")
     return HttpResponseRedirect(reverse('edit_event', args=[invitation.event.id]))
+
+@login_required
+def leave_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    # Check if the current user is not the owner of the event
+    if request.user != event.user:
+        # Check if the current user is a collaborator
+        if request.user in event.collaborators.all():
+            event.collaborators.remove(request.user)
+            event.save()
+            messages.success(request, "You have left the event successfully.")
+        else:
+            messages.info(request, "You are not a collaborator of this event.")
+    else:
+        messages.error(request, "As the owner, you cannot leave the event. You may delete it instead.")
+
+    return redirect('index') 

@@ -16,5 +16,5 @@ urlpatterns = [
     path('invitation/<int:invitation_id>/accept/', event_views.accept_invitation, name='accept_invitation'),
     path('invitation/<int:invitation_id>/decline/', event_views.decline_invitation, name='decline_invitation'),
     path('cancel_invitation/<int:invitation_id>/', event_views.cancel_invitation, name='cancel_invitation'),
-
+    path('leave_event/<int:event_id>/', event_views.leave_event, name='leave_event'),
 ]
