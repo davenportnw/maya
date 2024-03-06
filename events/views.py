@@ -153,17 +153,20 @@ def edit_event(request, event_id=None):
     invited_users_with_invitations = [
         {'user': invitation.invitee, 'invitation_id': invitation.id} for invitation in invitations
     ]
-    return render(request, 'edit_event.html', {'event': event, 'invited_users_with_invitations': invited_users_with_invitations, } )
+    collaborators = event.collaborators.all() 
+    return render(request, 'edit_event.html', {'event': event, 'invited_users_with_invitations': invited_users_with_invitations, 'collaborators': collaborators } )
 
 
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-
-    if request.method == 'POST':
-        event.delete()
-        messages.success(request, 'Deletion successful.')
-        return redirect('index')
-    return redirect('index')
+    if request.user == event.user:
+        if request.method == 'POST':
+            event.delete()
+            messages.success(request, 'Deletion successful.')
+            return redirect('index')
+    else:
+        messages.error(request, "You do not have permission to delete this event.")
+    return redirect('edit_event', event_id=event_id)
 
 
 #  ============= Login/Registration  =============
