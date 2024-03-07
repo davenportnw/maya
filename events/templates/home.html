@@ -51,9 +51,23 @@
                     <!-- Search/Filter Form -->
                     <form method="get" action="{% url 'index' %}">
                         <div class="row">
-                            <input type="text" name="search" value="{{ search_query }}" class="form-control w-100 py-2" placeholder="Search events">
-                            <button type="submit" class="btn mt-2 w-50" style="border-color: #092A25">Search</button>
-                            <a href="{% url 'index' %}" class="btn mt-2 w-50"style="border-color: #6F3313">Reset</a>
+                            <div class="col">
+                                <input type="text" name="search" value="{{ search_query }}" class="form-control w-100 py-4" placeholder="Search events">
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn" style="border-color: #092A25">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                    <a href="{% url 'index' %}" class="btn mt-2"style="border-color: #6F3313">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
                         </div>                                     
                     </form>
                     <div class="row justify-content-center">
