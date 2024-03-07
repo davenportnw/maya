@@ -6,3 +6,6 @@ Create a local certificate to run https locally
 
 Run local webapp, database, and nginx containers  
 `docker-compose up`
+
+Navigate to app  
+https://localhost/ or https://127.0.0.1/
