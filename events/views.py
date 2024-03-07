@@ -278,7 +278,10 @@ def leave_event(request, event_id):
     if request.user != event.user:
         # Check if the current user is a collaborator
         if request.user in event.collaborators.all():
+            # Remove user from collaborators
             event.collaborators.remove(request.user)
+            # Find and delete the corresponding invitation to allow re-inviting
+            CollaborationInvitation.objects.filter(event=event, invitee=request.user).delete()
             event.save()
             messages.success(request, "You have left the event successfully.")
         else:
