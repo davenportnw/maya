@@ -82,7 +82,7 @@
                                             {{ item.user.username }}
                                             <form action="{% url 'cancel_invitation' invitation_id=item.invitation_id %}" method="post" style="display: inline;">
                                                 {% csrf_token %}
-                                                <a type="submit" class="btn-sm" onclick="return confirm('Are you sure you want to cancel this invitation?');">x</a>
+                                                <button type="submit" class="btn-sm" style="border: none; outline: none; background-color: white; color:blue; text-decoration: underline;" onclick="return confirm('Are you sure you want to cancel this invitation?');">x</button>
                                             </form>
                                         </li>
                                             {% empty %}
