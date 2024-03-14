@@ -30,10 +30,11 @@
                             {% endfor %}
                         </div>
                     {% endif %}
+                    <h3>Event: '{{ event.name|truncatechars:20 }}'</h3>
                     <div class="card">
-                        <h5 class="card-header">
+                        <!-- <h5 class="card-header">
                             Edit Event '{{ event.name|truncatechars:20 }}'
-                        </h5>
+                        </h5> -->
                         <div class="card-body">
                              <!-- Change Event Name -->
                             <form method="post" action="{% url 'edit_event' event.id %}">
