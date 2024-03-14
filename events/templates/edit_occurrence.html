@@ -16,89 +16,87 @@
 </head>
 <body>
     {% block content %}
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <br/>
-            <div class="mb-3 d-flex flex-column align-items-center">
-                <div class="row">
-                    <div class="col">
-                        <!-- Edit Occurence Date -->
-                        <label class="font-monospace text-wrap">Edit occurence for:</label>
-                        <p class="font-monospace text-wrap">{{ event.name|truncatechars:20 }}</p>
-                        <!-- Datepicker  -->
-                        <form method="post" action="{% url 'edit_occurrence' occurrence_id=occurrence.id %}">
-                            {% csrf_token %}
-                            <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" width="276" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
-                            <div class="row justify-content-center">
-                                <div class="d-inline-flex flex-column w-100">
-                                    <div class="col-12">
-                                        <a class="btn col-md-6 mb-3  w-100" data-bs-toggle="collapse" href="#time" role="button" style="border-color: #336863; color: #336863" aria-expanded="false" aria-controls="multiCollapseExample1">Add/Edit Time</a>
-                                    </div>
-                                    <div class="collapse multi-collapse" id="time">
-                                        <div class="mb-3">
-                                            <!-- Time -->
-                                            <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+    <div class="container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <!-- Messages -->
+                    {% if messages %}
+                        <div class="container">
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} d-flex align-items-center " role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <h3>Event: '{{ event.name|truncatechars:20 }}'</h3>
+                    <div class="card">
+                        <div class="card-body">
+                             <!-- Datepicker  -->
+                            <form method="post" action="{% url 'edit_occurrence' occurrence_id=occurrence.id %}">
+                                {% csrf_token %}
+                                <input id="datepicker-{{ occurrence.id }}" class="form-control custom-datepicker-width" name="timestamp" value="{{ occurrence.timestamp|date:'m/d/Y' }}" />
+                                <div class="row justify-content-center">
+                                    <div class="d-inline-flex flex-column w-100">
+                                        <div class="col-12">
+                                            <a class="btn col-md-6 mb-3  w-100" data-bs-toggle="collapse" href="#time" role="button" style="border-color: #336863; color: #336863" aria-expanded="false" aria-controls="multiCollapseExample1">Time</a>
+                                        </div>
+                                        <div class="collapse multi-collapse" id="time">
+                                            <div class="mb-3">
+                                                <!-- Time -->
+                                                <input id="timepicker-{{ occurrence.id }}" class="form-control" type="time" name="timeofday" value="{{ occurrence.timeofday|date:'H:i' }}" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn col-md-6 mb-3  w-100" type="button" data-bs-toggle="collapse"  style="border-color: #D19A10; color:#D19A10;" data-bs-target="#note" aria-expanded="false" aria-controls="multiCollapseExample2">Note</button>
                                         </div>
                                     </div>
-                                    <div class="col-12">
-                                        <button class="btn col-md-6 mb-3  w-100" type="button" data-bs-toggle="collapse"  style="border-color: #D19A10; color:#D19A10;" data-bs-target="#note" aria-expanded="false" aria-controls="multiCollapseExample2">Add/Edit Note</button>
+                                </div>
+                                <div class="col mb-3">
+                                    <div class="collapse multi-collapse {% if occurrence.note and occurrence.note != 'None' %}show{% endif %}" id="note">
+                                        <!-- Notes -->
+                                        <div class="input-group">
+                                            <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="collapse multi-collapse {% if occurrence.note and occurrence.note != 'None' %}show{% endif %}" id="note">
-                                    <!-- Notes -->
-                                    <div class="input-group">
-                                        <textarea class="form-control" aria-label="With textarea" name="note">{{ occurrence.note }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <script>
-                                $(document).ready(function() {
-                                    $('#datepicker-{{ occurrence.id }}').datepicker({
-                                        uiLibrary: 'bootstrap5'
+                                <script>
+                                    $(document).ready(function() {
+                                        $('#datepicker-{{ occurrence.id }}').datepicker({
+                                            uiLibrary: 'bootstrap5'
+                                        });
                                     });
-                                });
-                            </script>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <!-- Save button -->
-                        <button type="submit" class="btn me-2" style="border-color: #86A08C; color:#86A08C; ">Save</button>
-                    </div>
+                                </script>
+                                <div class="row justify-content-between">
+                                    <div class="col-auto">
+                                        <!-- Save Button -->
+                                        <button type="submit" class="btn me-2" style="border-color: #86A08C; color:#86A08C; ">Save</button>
+                                    </div>
                             </form>
-                    <div class="col text-end">
-                        <form method="post"  action="{% url 'edit_occurrence' occurrence_id=occurrence.id %}" onsubmit="return confirmDelete(event)">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="delete">  
-                            <!-- Delete Btn                               -->
-                            <button type="submit" class="btn btn-outline-danger">Delete</button>
-                        </form>
-                        <script>
-                            function confirmDelete() {
-                                var result = confirm("Are you sure you want to delete this timestamp?");
-                                if (!result) {
-                                    event.preventDefault();
-                                    return false;
-                                }
-                                return true;
-                            }
-                        </script>
+                                    <div class="col-auto">
+                                        <!-- Delete Button -->
+                                        <form method="post"  action="{% url 'edit_occurrence' occurrence_id=occurrence.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete">  
+                                            <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this timestamp?')">Delete Occurence</button>
+                                        </form>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <!-- Back Button -->
+                        <a href="{% url 'index' %}" class="btn me-3" style="background-color: #092C27; border-color: #092C27; color:white;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                            </svg>
+                            Back
+                        </a>
+                        <!-- Logout -->
+                        <button onclick="window.location.href='{% url 'logout' %}'" class="btn" style="background-color: #092C27; border-color: #092C27; color:white;">Logout</button>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center mt-4">
-                    <!-- Back Button -->
-                    <a href="{% url 'index' %}" class="btn me-3" style="background-color: #092C27; border-color: #092C27; color:white;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-                        </svg>
-                        Back
-                    </a>
-                    <!-- Logout  -->
-                    <button onclick="window.location.href='{% url 'logout' %}'" class="btn" style="background-color: #092C27; border-color: #092C27; color:white;">Logout</button>
-                </div>
-
             </div>
         </div>
     </div>
