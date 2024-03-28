@@ -1,7 +1,7 @@
 import re
 
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Event, Occurrence
+from .models import Event, Occurrence, CollaborationInvitation
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from datetime import datetime
@@ -13,8 +13,10 @@ from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
+#  ============= Homepage/Events =============
 @login_required
 def index(request):    
     subquery = Occurrence.objects.filter(
@@ -22,25 +24,24 @@ def index(request):
     ).order_by('-timestamp')
 
     events = Event.objects.filter(
-        user=request.user
+        Q(user=request.user) | Q(collaborators=request.user)
     ).annotate(
         timestamp=Subquery(subquery.values('timestamp')[:1])
-    ).order_by('-timestamp')
-
-    # Search/Filter
-     # Start with the basic query
-    query = Event.objects.filter(user=request.user)
+    ).distinct().order_by('-timestamp')
+    
 
     # Handle the search query
     search_query = request.GET.get('search', '')
     if search_query:
-         query = query.filter(Q(name__icontains=search_query))
+         events = events.filter(Q(name__icontains=search_query))
 
-    # Annotate and order the events
-    subquery = Occurrence.objects.filter(event=OuterRef('pk')).order_by('-timestamp')
-    events = query.annotate(timestamp=Subquery(subquery.values('timestamp')[:1])).order_by('-timestamp')
-
-    return render(request, "home.html", {'events': events, 'search_query': search_query})
+    # Handle collab events
+    # Fetch pending invitations for the current user
+    pending_invitations = CollaborationInvitation.objects.filter(
+        invitee=request.user, 
+        accepted=None 
+    )
+    return render(request, "home.html", {'events': events, 'search_query': search_query, 'pending_invitations': pending_invitations})
 
 
 @login_required
@@ -88,7 +89,6 @@ def edit_occurrence(request, occurrence_id=None):
     occurrence = get_object_or_404(Occurrence, id=occurrence_id)
     event = occurrence.event
     if request.method == 'POST':
-
         # Check if this is a delete action
         if request.POST.get('action') == 'delete':
             occurrence.delete()
@@ -149,20 +149,27 @@ def edit_event(request, event_id=None):
             messages.success(request, 'Event updated successfully.')
             return redirect('index')
 
-    return render(request, 'edit_event.html', {'event': event})
+    invitations = CollaborationInvitation.objects.filter(event=event, accepted=None) 
+    invited_users_with_invitations = [
+        {'user': invitation.invitee, 'invitation_id': invitation.id} for invitation in invitations
+    ]
+    collaborators = event.collaborators.all() 
+    return render(request, 'edit_event.html', {'event': event, 'invited_users_with_invitations': invited_users_with_invitations, 'collaborators': collaborators } )
 
 
 def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
+    if request.user == event.user:
+        if request.method == 'POST':
+            event.delete()
+            messages.success(request, 'Deletion successful.')
+            return redirect('index')
+    else:
+        messages.error(request, "You do not have permission to delete this event.")
+    return redirect('edit_event', event_id=event_id)
 
-    if request.method == 'POST':
-        event.delete()
-        messages.success(request, 'Deletion successful.')
-        return redirect('index')
 
-    # If not POST, redirect back (or to some other page)
-    return redirect('index')
-
+#  ============= Login/Registration  =============
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -200,3 +207,86 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')    
+
+
+#  ============= Collaborated Events =============
+def send_invitation(request, event_id):
+    invitee_username = request.POST.get('invitee_username')
+    event = get_object_or_404(Event, id=event_id)
+    sender = request.user
+    if request.method == 'POST':
+        try:
+            invitee = User.objects.get(username=invitee_username) 
+            # Prevent sending an invitation to oneself
+            if sender == invitee:
+                messages.error(request, "You cannot send an invitation to yourself.")
+                print("can't send invite to yourself bro")
+                return redirect('edit_event', event_id=event_id)
+            # Check if an invitation already exists
+            elif CollaborationInvitation.objects.filter(event=event, sender=sender, invitee=invitee).exists():
+                messages.error(request, "An invitation has already been sent to this user.")
+                return redirect('edit_event', event_id=event_id)
+            else:
+            # Create and save the invitation
+                CollaborationInvitation.objects.create(
+                    event=event,
+                    sender=sender,
+                    invitee=invitee,
+                    accepted=None  # or leave this out if None is the default
+                )
+                messages.success(request,'Invite Sent!')
+            # Redirect to a confirmation page, or handle as needed
+        except User.DoesNotExist:
+            messages.error(request, 'Invalid Username')
+        return redirect('edit_event', event_id=event_id)
+    return redirect('edit_event', event_id=event_id)
+
+def accept_invitation(request, invitation_id):
+    invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user, accepted=None)
+    if invitation.accepted is not True:
+        invitation.accepted = True
+        invitation.save()
+        messages.success(request, 'You have accepted the invitation.')
+        invitation.event.collaborators.add(request.user)
+    else:
+        messages.info(request, "You have already accepted this invitation")
+    return redirect('index')
+
+def decline_invitation(request, invitation_id):
+    invitation = get_object_or_404(CollaborationInvitation, id=invitation_id, invitee=request.user)
+    invitation.accepted = False
+    invitation.save()
+    messages.success(request, "You have declined the invitation.")
+    return redirect('index')  
+
+def cancel_invitation(request, invitation_id):
+    invitation = get_object_or_404(CollaborationInvitation, pk=invitation_id)
+    print('before') 
+    # Ensure the request is made by the event owner or the one who sent the invite
+    if request.user == invitation.event.user:
+        invitation.delete()  # Or mark as canceled if you have a status field
+        messages.success(request, "Invitation canceled successfully.")
+    else:
+        messages.error(request, "You don't have permission to cancel this invitation.")
+    return HttpResponseRedirect(reverse('edit_event', args=[invitation.event.id]))
+
+@login_required
+def leave_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    # Check if the current user is not the owner of the event
+    if request.user != event.user:
+        # Check if the current user is a collaborator
+        if request.user in event.collaborators.all():
+            # Remove user from collaborators
+            event.collaborators.remove(request.user)
+            # Find and delete the corresponding invitation to allow re-inviting
+            CollaborationInvitation.objects.filter(event=event, invitee=request.user).delete()
+            event.save()
+            messages.success(request, "You have left the event successfully.")
+        else:
+            messages.info(request, "You are not a collaborator of this event.")
+    else:
+        messages.error(request, "As the owner, you cannot leave the event. You may delete it instead.")
+
+    return redirect('index') 

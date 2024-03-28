@@ -38,6 +38,46 @@
                         </form>
                     </div>
                 </div>
+                <!-- Messages -->
+                {% if messages %}
+                    <div class="container">
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} d-flex align-items-center " role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <!-- Collaboration -->
+                <form method="post" action="{% url 'send_invitation' event.id %}">
+                    {% csrf_token %}
+                    <input type="text" name="invitee_username" placeholder="Username of collaborator">
+                    <button type="submit">Send Invitation</button>
+                </form>
+                <ul>
+                    {% for item in invited_users_with_invitations %}
+                    <li>
+                        {{ item.user.username }}
+                        <form action="{% url 'cancel_invitation' invitation_id=item.invitation_id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Are you sure you want to cancel this invitation?');">X</button>
+                        </form>
+                    </li>
+                        {% empty %}
+                    <li>No users have been invited yet.</li>
+                    {% endfor %}
+                </ul>
+                <p>Owner: {{ event.user.username }}</p>
+                <h4>Collaborators</h4>
+                <ul>
+                    {% for person in collaborators %}
+                    <li>
+                        {{ person.first_name }}
+                    </li>
+                    {% empty %}
+                    <p>No collaborators</p>
+                    {% endfor %}
+                </ul>
                 <div class="row justify-content-center">
                      <!-- Back Button -->
                      <div class="col-auto">
@@ -51,21 +91,20 @@
                     <!-- Delete Button -->
                     <div class="col-auto">
                         <div class="d-flex bg-transparent justify-content-center" onsubmit="return confirmDelete('{{ event.name }}')">
-                            <form method="post" action="{% url 'events:delete_event' event.id %}">
+                            {% if user == event.user %}
+                                <!-- Display delete button/link -->
+                                <form method="post" action="{% url 'events:delete_event' event.id %}">
+                                    {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this event?')">Delete Event</button>  
+                                </form> 
+                            {% endif %}
+                            <!-- ---- Leave event ---- -->
+                            {% if user != event.user and user in event.collaborators.all %}
+                            <form action="{% url 'leave_event' event.id %}" method="post">
                                 {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger">Delete Event</button>  
-                            </form> 
-                            <script>
-                                function confirmDelete(eventName) {
-                                    var result = confirm("Are you sure you want to delete" + " ' " + eventName + " ' " + "event?");
-                                    console.log('result: ', result);
-                                    if (!result) {
-                                        event.preventDefault();
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                            </script>
+                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to leave this event?');">Leave Event</button>
+                            </form>
+                        {% endif %}
                         </div>
                     </div>
                 </div>
