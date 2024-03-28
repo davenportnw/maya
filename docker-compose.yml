@@ -47,8 +47,9 @@ services:
       - "443:443"  # Map port 80 on the host to port 80 in the Nginx container
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - /etc/nginx/ssl:/etc/nginx/ssl:ro
-      - /Users/nicoledavenport/maya/favicon.ico:/usr/share/nginx/html/favicon.ico
+      - ./localhost+2.pem:/etc/nginx/ssl/nginx.crt:ro
+      - ./localhost+2-key.pem:/etc/nginx/ssl/nginx.key:ro
+      - ./favicon.ico:/usr/share/nginx/html/favicon.ico
     depends_on:
       - web
 volumes:
