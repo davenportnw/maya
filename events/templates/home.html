@@ -24,26 +24,44 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <!-- Input Event -->
-                    <form method="post" action="{% url 'events:add_event' %}" class="form-text">
+                    <!-- Search/Filter Form -->
+                    <form method="get" action="{% url 'index' %}">
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" name="search" value="{{ search_query }}" class="form-control w-100" placeholder="Search events">
+                            </div>
+                            <div class="col-auto">
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn" style="border-color: #092A25">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>                                     
+                    </form>
+                     <!-- Input Event -->
+                     <form method="post" action="{% url 'events:add_event' %}" class="form-text">
                         {% csrf_token %}
-                        <div class="row justify-content-center">
-                            <div class="col-8 col-md-8">
+                        <div class="row mt-2">
+                            <div class="col">
                                 <input type="text" name="event_name" id="event_name" class="form-control w-100 py-4" placeholder="Enter Event Name">
                             </div>
-                            <div class="col-2 col-md-2">
-                                <!-- Add Event Button -->
-                                <button type="submit" class="btn mb-2" style="border-color: #86A08C; color:#86A08C;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-                                      </svg>
-                                </button>
-                                <!-- Filter Button -->
-                                <a class="btn mt-2" data-bs-toggle="collapse" href="#filter" role="button" style="border-color: #336863; color: #336863" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.398 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.386 1.386 0 0 0-.114-.099zm-5.742.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
-                                    </svg>
-                                </a>                                
+                            <div class="col-auto">
+                                <div class="d-grid gap-2">
+                                    <!-- Add Event Button -->
+                                    <button type="submit" class="btn mb-1" style="border-color: #86A08C; color:#86A08C;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                                            </svg>
+                                    </button>
+                                    <a href="{% url 'index' %}" class="btn"style="border-color: #6F3313">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -53,17 +71,6 @@
                         }
 
                     </style>
-                    <hr/>
-                    <!-- Search/Filter Form -->
-                    <div class="collapse multi-collapse" id="filter">
-                        <form method="get" action="{% url 'index' %}">
-                            <div class="row">
-                                <input type="text" name="search" value="{{ search_query }}" class="form-control w-100 py-2" placeholder="Search events">
-                                <button type="submit" class="btn mt-2 w-50" style="border-color: #092A25">Search</button>
-                                <a href="{% url 'index' %}" class="btn mt-2 w-50"style="border-color: #6F3313">Reset</a>
-                            </div>                                     
-                        </form>
-                    </div>
                     <div class="row justify-content-center">
                         <ul> 
                             <!-- collaborated events -->
@@ -79,7 +86,6 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <p>No pending invitations.</p>
                             {% endif %}
                             <!-- User Events -->
                             {% for event in events %}
