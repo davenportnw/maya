@@ -76,12 +76,16 @@
                             <!-- collaborated events -->
                             {% if pending_invitations %}
                                 {% for invitation in pending_invitations %}
-                                    <div>
-                                        <p>You've been invited to collaborate on "{{ invitation.event.name }}" by {{ invitation.sender.username }}.</p>
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                        <p><b>You've been invited to collaborate on "{{ invitation.event.name }}" by {{ invitation.sender.username }}.</b></p>
                                         <div>
-                                            <p>Invitation to join {{ invitation.event.name }}</p>
-                                            <a href="{% url 'accept_invitation' invitation.id %}">Accept</a>
-                                            <a href="{% url 'decline_invitation' invitation.id %}">Decline</a>
+                                            <!-- <p>Invitation to join {{ invitation.event.name }}</p> -->
+                                            <button type="button" class="btn btn-outline-primary">
+                                                <a href="{% url 'accept_invitation' invitation.id %}">Accept</a>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary">
+                                                <a href="{% url 'decline_invitation' invitation.id %}">Decline</a>
+                                            </button>
                                         </div>
                                     </div>
                                 {% endfor %}
